@@ -32,7 +32,7 @@ if (!is_null(filter_input(INPUT_GET, 'submit'))) {
 	</div>
 	<br>
 	<div>
-		<button type="submit" id="submit" name="submit" value="">Enviar</button>
+		<button type="submit" id="submit" name="submit">Enviar</button>
 		<button type="reset" id="reset" name="reset">Netejar</button>
 	</div>
 </form>
