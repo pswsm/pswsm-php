@@ -6,7 +6,7 @@ function formatToName(string $name, string $surnames): string {
 	for ($i = 0; $i < count($sepSurnames); $i++) {
 		$fSepSurnames[$i] = ucfirst($sepSurnames[$i]);
 	}
-	return implode(" ", [$fName, implode(" ", $fSepSurnames)]);
+	return $fName . " " . implode(" ", $fSepSurnames);
 }
 
 if (!is_null(filter_input(INPUT_GET, 'submit'))) {
