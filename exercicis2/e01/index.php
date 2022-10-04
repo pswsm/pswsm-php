@@ -9,7 +9,7 @@ function formatToName(string $name, string $surnames): string {
 	return $fName . " " . implode(" ", $fSepSurnames);
 }
 
-if (!is_null(filter_input(INPUT_GET, 'submit'))) {
+if (filter_has_var(INPUT_GET, 'submit')) {
 	$formatFullName = formatToName(filter_input(INPUT_GET, "nom"), filter_input(INPUT_GET, "cognom"));
 }
 ?>
