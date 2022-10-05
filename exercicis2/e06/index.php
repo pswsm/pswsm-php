@@ -10,16 +10,16 @@ $error = "";
 //get data sent from form
 if (filter_has_var(INPUT_POST, 'btnSubmit')) { //assess that form has been sent
     //get selected drink from data sent by form
-    $selectedDrink = trim(filter_input(INPUT_POST, 'drink', FILTER_SANITIZE_STRING));
+	$selectedQuilos = trim(filter_input(INPUT_POST, 'quilos', FILTER_SANITIZE_NUMBER_INT));
     try {
         //get drink price from array of data
-        $price = patates\getPatatesPrice($selectedDrink);
+        $price = patates\getPatatesPrice($selectedQuilos);
     } catch (\Exception $ex) { //catch error when drink name is not found
-        $error = "drink $selectedDrink: not found";
+        $error = "pes $selectedQuilos: not found";
         $price = 0.0;
     }
 } else {
-    $selectedDrink = "";
+    $selectedQuilos = "";
     $price = 0.0;
 }
 ?>
@@ -27,24 +27,23 @@ if (filter_has_var(INPUT_POST, 'btnSubmit')) { //assess that form has been sent
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Drinks order form</title>
+        <title>Patates</title>
         <link rel="stylesheet" href="css/drinks.css" />
     </head>
     <body>
-        <h2>Welcome to Organic Pub</h2>
+        <h2>Demana Patates</h2>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
             <fieldset>
-                <legend>Order your drinks here</legend> 
+                <legend>Order your patates here</legend> 
                 <div>
                     <label for="quilos">Quilos de patates:</label><br>
                     <!-- write a selector for drinks -->
                     <?php
                     //get all drink names
-                    $preus = patates\getPatatesPrice();
+                    $preus = patates\getPatates();
                     //DEBUG: add a test drink not in initial array to check drink not found error (REMOVE FOR PRODUCTION!!!)
-                    array_push($preus, 12.12);
                     //echo selector with all drink names
-                    patates_dom\renderSlider("quilos", $preus, $selectedDrink);
+                    patates_dom\renderSlider("quilos", $preus);
                     ?>
                     <button type="submit" name="btnSubmit" value="submit">Submit</button>
                 </div>
@@ -52,8 +51,8 @@ if (filter_has_var(INPUT_POST, 'btnSubmit')) { //assess that form has been sent
             <fieldset>
                 <legend>Receipt</legend> 
                 <div>
-                    <label for="selectedDrink">Drink: </label>
-                    <input type="text" name="selectedDrink" disabled="disabled" value="<?php echo $selectedDrink ?? ""; ?>" />
+                    <label for="selectedDrink">Pes: </label>
+                    <input type="text" name="quilos" disabled="disabled" value="<?php echo $selectedQuilos . " kg" ?? ""; ?>" />
                 </div>
                 <div>
                     <label for="price">Unit price: </label>

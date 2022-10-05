@@ -4,11 +4,11 @@ namespace pswsm\patates;
 
 //array of drinks and prices
 $preus_patata = [
-    '25kg' => 1.0,
-    '50kg' => 16.5,
-    '75kg' => 55.0,
-    '100kg' => 190.0,
-    '125kg' => 300.0
+    25 => 1.0,
+    50 => 16.5,
+    75 => 55.0,
+    100 => 190.0,
+    125 => 300.0
 ];
 
 /**
@@ -36,5 +36,5 @@ function getPatatesPrice(string $quilos): float {
     } else {
         throw new \Exception("Massa quilos", -1);
     }
-    return $preus_patata[$quilos];
+    return $preu_final;
 }
