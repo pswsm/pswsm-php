@@ -1,4 +1,7 @@
 <?php
+// https://www.php.net/manual/en/filter.filters.sanitize.php
+// El filtre FILTER_SANITIZE_STRING s'ha deprecat en favor de la funcio htmlspecialchars()
+
 include_once "lib.php";
 use pswsm\login as login;
 $data = login\getDataFromFile();
@@ -55,7 +58,7 @@ if (\filter_has_var(INPUT_POST, "submit")) {
 			} else if (isset($noneOk)) {
 				echo "User not found!";
 			} else {
-				"Something went terribly wrong!";
+				echo "Something went terribly wrong!";
 			}
 			?>
 			</div>
