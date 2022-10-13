@@ -12,15 +12,26 @@ function getDataFromFile(): array {
 	return $lines_kv;
 }
 
-function pwdOk(array $userData, string $username, string $password): array {
-	$usernames = array_keys($userData);
-	$inDb = [false, false];
-	if (in_array($username, $usernames)) {
-		$inDb[0] = true;
+function pwdOk(string $username, string $password): array {
+	if (file_exists(DB_FILE)) {
+		$fileHandle = fopen(DB_FILE, "rb");
+		while (!feof($fileHandle)) {
+			fscanf($fileHandle, "%s\n", $line);
+			$kvs = explode(":", $line);
+			$line_kv[$kvs [0]] = $kvs[1];
+			if (in_array($username, array_keys($line_kv))) {
+				$userOk = true;
+			} else {
+				$userOk = false;
+			}
+			if ($userOk && $line_kv[$username] == $password) {
+				$pswdOk = true;
+			} else {
+				$pswdOk = false;
+			}
+		}
 	}
-	if ($inDb[0] && $userData[$username] == $password) {
-		$inDb[1] = true;
-	}
-	return $inDb;
+	fclose($fileHandle);
+	return [$userOk, $pswdOk];
 }
 } ?>

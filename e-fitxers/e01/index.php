@@ -7,7 +7,7 @@ use pswsm\login as login;
 $data = login\getDataFromFile();
 
 if (\filter_has_var(INPUT_POST, "submit")) {
-	$userExists = login\pwdOk($data, htmlspecialchars($_POST["username"]), htmlspecialchars($_POST["password"]));
+	$userExists = login\pwdOk(htmlspecialchars($_POST["username"]), htmlspecialchars($_POST["password"]));
 	if ($userExists == [true, true]) {
 		$allOk = true;
 	} else if ($userExists == [true, false]) {
@@ -57,8 +57,6 @@ if (\filter_has_var(INPUT_POST, "submit")) {
 				echo "<p>Logged in as: " . htmlspecialchars($_POST["username"]);
 			} else if (isset($noneOk)) {
 				echo "User not found!";
-			} else {
-				echo "Something went terribly wrong!";
 			}
 			?>
 			</div>
