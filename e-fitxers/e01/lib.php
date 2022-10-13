@@ -15,15 +15,11 @@ function getDataFromFile(): array {
 function pwdOk(array $userData, string $username, string $password): array {
 	$usernames = array_keys($userData);
 	$inDb = [false, false];
-	for ($i=0; $i < count($usernames); $i++) {
-		if ($usernames[$i] == $username) {
-			$inDb[0] = true;
-		}
+	if (in_array($username, $usernames)) {
+		$inDb[0] = true;
 	}
-	if ($inDb) {
-		if ($userData[$username] == $password) {
-			$inDb[1] = true;
-		}
+	if ($inDb[0] && $userData[$username] == $password) {
+		$inDb[1] = true;
 	}
 	return $inDb;
 }
