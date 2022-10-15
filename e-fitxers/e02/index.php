@@ -26,13 +26,13 @@ if (\filter_has_var(INPUT_POST, "submit")) {
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
 <body>
-	<p class="has-text-centered is-size-1">Validar desde fitxer</p>
+	<p class="has-text-centered is-size-1">Crear usuari</p>
 	<div class="columns">
 		<div class="column"></div>
 		<div class="column is-two-thirds">
 			<div class="box">
 			<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-					<p class="is-size-4 has-text-centered">Validar dades desde un fixter:</p><br>
+					<p class="is-size-4 has-text-centered">Crear un usuari</p><br>
 					<div class="field">
 						<div class="control">
 							<label class="label" for="">Nom d'usuari:</label>
@@ -51,12 +51,10 @@ if (\filter_has_var(INPUT_POST, "submit")) {
 			</div>
 			<div class="container">
 			<?php
-			if (isset($usernameOk)) {
-				echo "<p>Password is incorrect</p>";
-			} else if (isset($allOk)) {
-				echo "<p>Logged in as: " . htmlspecialchars($_POST["username"]) . "</p>";
+			if (isset($usernameOk) || isset($allOk)) {
+				echo "<p>User already exists</p>";
 			}  else if (isset($createdUser)) {
-				echo "<p>Created user \"" . htmlspecialchars($_POST["username"]) . "</p>";
+				echo "<p>Created user \"" . htmlspecialchars($_POST["username"]) . "\"</p>";
 			}
 			?>
 			</div>
