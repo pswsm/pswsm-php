@@ -5,6 +5,10 @@
 include_once "lib.php";
 use pswsm\chooseFile as cf;
 
+if (filter_has_var(INPUT_POST, "submit")) {
+	$wordsList = cf\listWords(htmlspecialchars($_POST["files"]));
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +27,7 @@ use pswsm\chooseFile as cf;
 					<div class="field">
 						<div class="control">
 							<select id="files" name="files">
-							<?php echo cf\createOptions(cf\listFiles()) ?>
+							<?php echo cf\createOptions(cf\listFiles(FILES_DIR)) ?>
 							</select>
 						</div>
 					</div>
@@ -36,13 +40,7 @@ use pswsm\chooseFile as cf;
 				</form>
 			</div>
 			<div class="container">
-			<p>
-			<?php
-			if (filter_has_var(INPUT_POST, "submit")) {
-				echo implode("<br>", file(FILES_DIR . "/" . htmlspecialchars($_POST["files"])));
-			}
-			?>
-			</p>
+			<?php $dom = (isset($wordsList)) ? cf\createListing($wordsList) : "" ; echo $dom; ?>
 			</div>
 		</div>
 		<div class="column"></div>
