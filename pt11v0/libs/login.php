@@ -1,31 +1,43 @@
-<?php namespace practica {
+<?php namespace practica\login {
+define('FIELDNAMES', ["username", "password", "role", "name", "surname"]);
 /**
  * Authenticate user
  *
  * @param string $username	The username
  * @param string $password	The password
- * @param string $db		DB File location
- * @return array|int		Reutrns an array with 2 booleans or int 1 if error
+ * @param string $db		Optional. DB File location
+ * @return int				Reutrn codes:
+ * 							0 => Login OK
+ * 							1 => Username not found
+ * 							2 => Username OK, password not correct
+ * 							3 => Could not open database
  */
-function userAuth(string $username, string $password, string $db = "../db/users.txt"): array|int {
+function userAuth(string $username, string $password, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): int {
 	if (file_exists($db)) {
-		$fileHandle = fopen(DB_FILE, "rb");
+		$fileHandle = fopen($db, "rb");
 		while (!feof($fileHandle)) {
-			fscanf($fileHandle, "%s\n", $line);
-			$kvs = explode(":", $line);
-			$line_kv[$kvs [0]] = $kvs[1];
-			$inDb = [false, false];
-			if (in_array($username, array_keys($line_kv))) {
-				$inDb[0] = true;
-			}
-			if ($inDb[0] && $line_kv[$username] == $password) {
-				$inDb[1] = true;
+			$line = fgetcsv($fileHandle, separator: ";");
+			if ($line != false) {
+				for ($i=0; $i < count($line); $i++) { 
+					$line_kv[FIELDNAMES[$i]] = $line[$i];
+				}
+				$retCode = 1;
+				if ($username == $line_kv["username"]) {
+					$retCode = 0;
+				}
+				if (!($retCode == 0 && $line_kv["password"] == $password)) {
+					$retCode = 2;
+				}
+				if ($retCode == 0) {
+					fclose($fileHandle);
+					return $retCode;
+				}
 			}
 		}
 		fclose($fileHandle);
-		return $inDb;
+		return $retCode;
 	}
-	return 1;
+	return 3;
 }
 
 /**
@@ -33,13 +45,22 @@ function userAuth(string $username, string $password, string $db = "../db/users.
  *
  * @param string $username	The username
  * @param string $password	The password
- * @param string $db		DB File location
- * @return int Returns 0 if everything ok
+ * @param string $db		Optional. DB File location
+ * @return int				Returns codes:
+* 							0 => User creation OK
+* 							1 => User already exists
+* 							2 => Could not connect with DB
  */
-function userMake(string $username, string $password, string $db = "../db/users.txt"): int {
-	$fileHandle = fopen($db, "a");
-	fprintf($fileHandle, "%s:%s\n", $username, $password);
-	fclose($fileHandle);
-	return 0;
+function userMake(string $username, string $password, string $name, string $surname, string $role = "registered", string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): int {
+	if (file_exists($db)) {
+		if (userAuth($username, "", $db) == 1) {
+			$fileHandle = fopen($db, "a");
+			fputcsv($fileHandle, array($username, $password, $role, $name, $surname), separator: ";");
+			fclose($fileHandle);
+			return 0;
+		}
+		return 2;
+	}
+	return 3;
 }
 } ?>

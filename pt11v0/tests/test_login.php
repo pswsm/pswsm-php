@@ -1,10 +1,62 @@
-<?php
-require_once "../libs/practica.php";
-use practica as pt;
+<?php namespace practica\tests {
+require_once "/home/pswsm/code/pswsm-php/pt11v0/libs/login.php";
+use practica\login as login;
 
-$user = pt\userAuth("pswsm-test", "1234", "./test_db.txt");
-if ($user == 1) {
-	printf("%s", "Could not create user");
+function test_unexistiting_user() {
+	echo "Test with incorrect user:\n";
+	$user = login\userAuth("pswsm-test", "1234", db: "/home/pswsm/code/pswsm-php/pt11v0/tests/test_db.txt");
 
+	switch ($user) {
+		case 0:
+			printf("Code %d. Login OK.\n", $user);
+			break;
+
+		case 1:
+			printf("Code %d. Username not found.\n", $user);
+			break;
+		
+		case 2:
+			printf("Code %d. Password incorrect.\n", $user);
+			break;
+		
+		case 3:
+			printf("Code %d. Could not contact database.\n", $user);
+			break;
+		
+		default:
+			printf("Unexpected return value.\n");
+			break;
+	}
 }
-?>
+
+function test_existiting_user() {
+	echo "Test with existing user:\n";
+	$user = login\userAuth("pswsm", "1234", db: "/home/pswsm/code/pswsm-php/pt11v0/tests/test_db.txt");
+
+	switch ($user) {
+		case 0:
+			printf("Code %d. Login OK.\n", $user);
+			break;
+
+		case 1:
+			printf("Code %d. Username not found.\n", $user);
+			break;
+		
+		case 2:
+			printf("Code %d. Password incorrect.\n", $user);
+			break;
+		
+		case 3:
+			printf("Code %d. Could not contact database.\n", $user);
+			break;
+		
+		default:
+			printf("Unexpected return value.\n");
+			break;
+	}
+}
+
+test_existiting_user();
+test_unexistiting_user();
+
+} ?>

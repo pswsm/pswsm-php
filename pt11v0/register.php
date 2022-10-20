@@ -1,3 +1,11 @@
+<?php
+require_once "./libs/login.php";
+use practica\login as login;
+
+if (filter_has_var(INPUT_POST, "submit")) {
+	echo "Big mama";
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
