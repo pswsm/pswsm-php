@@ -1,5 +1,5 @@
 <?php namespace practica\tests {
-require_once "/home/pswsm/code/pswsm-php/pt11v0/libs/login.php";
+require_once "/home/pswsm/code/pswsm-php/pt11v0/libs/userlib.php";
 use practica\login as login;
 
 function test_unexistiting_user() {

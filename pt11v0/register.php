@@ -1,9 +1,12 @@
 <?php
-require_once "./libs/login.php";
+require_once "./libs/userlib.php";
+require_once "./libs/registerDom.php";
 use practica\login as login;
+use practica\dom as dom;
 
-if (filter_has_var(INPUT_POST, "submit")) {
-	echo "Big mama";
+if (filter_has_var(INPUT_POST, "registersubmit")) {
+	$mkUserRes = login\userMake(htmlspecialchars($_POST["username"]), htmlspecialchars($_POST["password"]), htmlspecialchars($_POST["name"]), htmlspecialchars($_POST["surname"]));
+	$dom = dom\domRegistered(htmlspecialchars($_POST["username"]), $mkUserRes);
 }
 ?>
 <!DOCTYPE html>
@@ -38,6 +41,7 @@ if (filter_has_var(INPUT_POST, "submit")) {
     </div>
     <button type="submit" name="registersubmit" class="btn btn-default">Submit</button>
   </form>
+<?php if (isset($dom)) { echo $dom; }; ?>
 </div>
 </body>
 </html>

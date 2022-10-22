@@ -1,5 +1,3 @@
 pswsm;1234;registered;Pau;Figueras
 joan;joanet;registered;Joan;Roig
 pswsm1;1234;registered;pau;figueras
-pswsm1;1234;registered;pau;figueras
-pswsm1;1234;registered;pau;figueras

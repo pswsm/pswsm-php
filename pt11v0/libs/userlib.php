@@ -14,7 +14,7 @@ define('FIELDNAMES', ["username", "password", "role", "name", "surname"]);
  */
 function userAuth(string $username, string $password, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): int {
 	if (file_exists($db)) {
-		$fileHandle = fopen($db, "rb");
+		$fileHandle = fopen($db, "r");
 		while (!feof($fileHandle)) {
 			$line = fgetcsv($fileHandle, separator: ";");
 			if ($line != false) {
@@ -25,7 +25,7 @@ function userAuth(string $username, string $password, string $db = "/home/pswsm/
 				if ($username == $line_kv["username"]) {
 					$retCode = 0;
 				}
-				if (!($retCode == 0 && $line_kv["password"] == $password)) {
+				if ($retCode == 0 && !($line_kv["password"] == $password)) {
 					$retCode = 2;
 				}
 				if ($retCode == 0) {
@@ -59,8 +59,8 @@ function userMake(string $username, string $password, string $name, string $surn
 			fclose($fileHandle);
 			return 0;
 		}
-		return 2;
+		return 1;
 	}
-	return 3;
+	return 2;
 }
 } ?>
