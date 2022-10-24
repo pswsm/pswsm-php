@@ -45,6 +45,7 @@ function userAuth(string $username, string $password, string $db = "/home/pswsm/
  *
  * @param string $username	The username
  * @param string $password	The password
+ * @param string $role		Optional. The role of the user
  * @param string $db		Optional. DB File location
  * @return int				Returns codes:
 * 							0 => User creation OK
@@ -52,10 +53,13 @@ function userAuth(string $username, string $password, string $db = "/home/pswsm/
 * 							2 => Could not connect with DB
  */
 function userMake(string $username, string $password, string $name, string $surname, string $role = "registered", string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): int {
+	echo "start usermake call<br>";
 	if (file_exists($db)) {
-		if (userAuth($username, "", $db) == 1) {
-			$fileHandle = fopen($db, "a");
+		if (userAuth($username, "", db: $db) == 1) {
+			$fileHandle = fopen($db, "a+");
+			echo "db open<br>";
 			fputcsv($fileHandle, array($username, $password, $role, $name, $surname), separator: ";");
+			echo "csv write<br>";
 			fclose($fileHandle);
 			return 0;
 		}
