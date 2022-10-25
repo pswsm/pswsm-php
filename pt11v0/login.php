@@ -1,5 +1,18 @@
 <?php
-require_once "./libs/userlib.php"
+require_once "./libs/userlib.php";
+require_once "./libs/loginDom.php";
+use practica\login as login;
+use practica\dom as dom;
+
+if (filter_has_var(INPUT_POST, "loginsubmit")) {
+	$username = htmlspecialchars(trim($_POST["username"]));
+	$uAuth = login\userAuth(
+		$username,
+		htmlspecialchars($_POST["password"]),
+		db: "./db/users.txt"
+	);
+	$dom = dom\mkLoginDom($uAuth, $username, login\getRole($username));
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,6 +41,7 @@ require_once "./libs/userlib.php"
     </div>
     <button type="submit" name="loginsubmit" class="btn btn-default">Submit</button>
   </form>
+  <p><?php if (isset($dom)) { echo $dom; }; ?></p>
 </div>
 </body>
 </html>

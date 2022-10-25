@@ -64,4 +64,22 @@ function userMake(string $username, string $password, string $name, string $surn
 	}
 	return 2;
 }
+
+function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): string {
+	if (file_exists($db)) {
+		$fileHandle = fopen($db, "r");
+		while (!feof($fileHandle)) {
+			$line = fgetcsv($fileHandle, separator: ";");
+			if ($line != false) {
+				for ($i=0; $i < count($line); $i++) { 
+					$line_kv[FIELDNAMES[$i]] = $line[$i];
+				}
+				$role = $line_kv["role"];
+			}
+		}
+		fclose($fileHandle);
+		return $role;
+	}
+	return 3;
+}
 } ?>
