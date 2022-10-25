@@ -5,7 +5,6 @@ use practica\login as login;
 use practica\dom as dom;
 
 if (filter_has_var(INPUT_POST, "registersubmit")) {
-	print_r($_POST);
 	$mkUserRes = login\userMake(
 		htmlspecialchars($_POST["username"]),
 		htmlspecialchars($_POST["password"]),

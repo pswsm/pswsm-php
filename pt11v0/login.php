@@ -1,3 +1,6 @@
+<?php
+require_once "./libs/userlib.php"
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>

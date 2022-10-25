@@ -1,6 +1,5 @@
 <?php namespace practica\dom {
 function domRegistered(string $username, int $regRetCode): string {
-	echo "fn start ok";
 	$dom = "";
 	switch ($regRetCode) {
 		case 0:

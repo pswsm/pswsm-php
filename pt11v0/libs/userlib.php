@@ -53,13 +53,10 @@ function userAuth(string $username, string $password, string $db = "/home/pswsm/
 * 							2 => Could not connect with DB
  */
 function userMake(string $username, string $password, string $name, string $surname, string $role = "registered", string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): int {
-	echo "start usermake call<br>";
 	if (file_exists($db)) {
 		if (userAuth($username, "", db: $db) == 1) {
 			$fileHandle = fopen($db, "a+");
-			echo "db open<br>";
 			fputcsv($fileHandle, array($username, $password, $role, $name, $surname), separator: ";");
-			echo "csv write<br>";
 			fclose($fileHandle);
 			return 0;
 		}
