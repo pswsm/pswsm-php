@@ -65,7 +65,7 @@ function userMake(string $username, string $password, string $name, string $surn
 	return 2;
 }
 
-function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): string {
+function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): array|string {
 	if (file_exists($db)) {
 		$fileHandle = fopen($db, "r");
 		while (!feof($fileHandle)) {
@@ -74,12 +74,14 @@ function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11
 				for ($i=0; $i < count($line); $i++) { 
 					$line_kv[FIELDNAMES[$i]] = $line[$i];
 				}
-				$role = $line_kv["role"];
+				if ($line_kv["username"] == $username) {
+					fclose($fileHandle);
+					return $line_kv;
+				}
 			}
 		}
 		fclose($fileHandle);
-		return $role;
 	}
-	return 3;
+	return 1;
 }
 } ?>

@@ -4,6 +4,7 @@ require_once "./libs/loginDom.php";
 use practica\login as login;
 use practica\dom as dom;
 
+session_start();
 if (filter_has_var(INPUT_POST, "loginsubmit")) {
 	$username = htmlspecialchars(trim($_POST["username"]));
 	$uAuth = login\userAuth(
@@ -11,7 +12,7 @@ if (filter_has_var(INPUT_POST, "loginsubmit")) {
 		htmlspecialchars($_POST["password"]),
 		db: "./db/users.txt"
 	);
-	$dom = dom\mkLoginDom($uAuth, $username, login\getRole($username));
+	$dom = dom\mkLogin($uAuth, login\getRole($username));
 }
 ?>
 <!DOCTYPE html>

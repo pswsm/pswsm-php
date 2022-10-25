@@ -1,14 +1,18 @@
 <?php namespace practica\dom {
 
-function mkLoginDom(string $uAuth, string $user, string $role):?string {
+function mkLogin( int $uAuth, array $userData):?string {
 	switch ($uAuth) {
 		case 0:
-			setcookie("loggedUser", json_encode(["user" => $user, "role" => $role]));
+			session_start();
+			$_SESSION["role"] = $userData["role"];
+			$_SESSION["user"] = $userData["username"];
+			$_SESSION["name"] = $userData["name"];
+			$_SESSION["surname"] = $userData["surname"];
 			header("Location: ./index.php");
 			break;
 
 		case 1:
-			$retText = "Username \"$user\" not found!";
+			$retText = "Username " . $userData["username"] . " not found!";
 			break;
 
 		case 2:

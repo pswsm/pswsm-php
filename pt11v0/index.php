@@ -1,5 +1,16 @@
 <?php
-session_start();
+require_once "./libs/navbarDom.php";
+use practica\dom as dom;
+if (isset($_COOKIE["PHPSESSID"])) {
+	session_start();
+
+	if (isset($_SESSION["user"], $_SESSION["role"], $_SESSION["surname"], $_SESSION["name"])) {
+		$user = $_SESSION["user"];
+		$role = $_SESSION["role"];
+		$name = $_SESSION["name"];
+		$surn = $_SESSION["surname"];
+	}
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
