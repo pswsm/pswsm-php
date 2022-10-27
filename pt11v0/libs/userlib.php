@@ -23,6 +23,7 @@ function userAuth(string $username, string $password, string $db = "./db/users.t
 				}
 				$retCode = 1;
 				if ($username == $line_kv["username"]) {
+					echo $line_kv["username"];
 					$retCode = 0;
 				}
 				if ($retCode == 0 && !($line_kv["password"] == $password)) {
@@ -65,7 +66,7 @@ function userMake(string $username, string $password, string $name, string $surn
 	return 2;
 }
 
-function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): array|string {
+function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): array {
 	if (file_exists($db)) {
 		$fileHandle = fopen($db, "r");
 		while (!feof($fileHandle)) {
@@ -82,6 +83,6 @@ function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11
 		}
 		fclose($fileHandle);
 	}
-	return 1;
+	return [];
 }
 } ?>
