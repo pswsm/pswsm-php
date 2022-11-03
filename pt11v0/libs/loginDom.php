@@ -12,7 +12,7 @@ function mkLogin( int $uAuth, array $userData):?string {
 			break;
 
 		case 1:
-			$retText = "Username not found!";
+			$retText = "Username " . $userData["username"] . " not found!";
 			break;
 
 		case 2:

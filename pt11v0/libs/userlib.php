@@ -12,7 +12,7 @@ define('FIELDNAMES', ["username", "password", "role", "name", "surname"]);
  * 							2 => Username OK, password not correct
  * 							3 => Could not open database
  */
-function userAuth(string $username, string $password, string $db = "./db/users.txt"): int {
+function userAuth(string $username, string $password, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): int {
 	if (file_exists($db)) {
 		$fileHandle = fopen($db, "r");
 		while (!feof($fileHandle)) {
@@ -23,7 +23,6 @@ function userAuth(string $username, string $password, string $db = "./db/users.t
 				}
 				$retCode = 1;
 				if ($username == $line_kv["username"]) {
-					echo $line_kv["username"];
 					$retCode = 0;
 				}
 				if ($retCode == 0 && !($line_kv["password"] == $password)) {
@@ -53,7 +52,7 @@ function userAuth(string $username, string $password, string $db = "./db/users.t
 * 							1 => User already exists
 * 							2 => Could not connect with DB
  */
-function userMake(string $username, string $password, string $name, string $surname, string $role = "registered", string $db = "./db/users.txt"): int {
+function userMake(string $username, string $password, string $name, string $surname, string $role = "registered", string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): int {
 	if (file_exists($db)) {
 		if (userAuth($username, "", db: $db) == 1) {
 			$fileHandle = fopen($db, "a+");
@@ -66,7 +65,7 @@ function userMake(string $username, string $password, string $name, string $surn
 	return 2;
 }
 
-function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): array {
+function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): array|string {
 	if (file_exists($db)) {
 		$fileHandle = fopen($db, "r");
 		while (!feof($fileHandle)) {
@@ -83,6 +82,6 @@ function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11
 		}
 		fclose($fileHandle);
 	}
-	return [];
+	return 1;
 }
 } ?>

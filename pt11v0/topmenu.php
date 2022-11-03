@@ -7,14 +7,22 @@ use practica\dom as dom;
 <div class="navbar-header">
 <a class="navbar-brand" href="https://www.proven.cat">ProvenSoft</a>
 </div>
+<ul class="nav navbar-nav">
+<li><a href='index.php'>Home</a></li>
+<li><a href='daymenu.php'>Day Menu</a></li>
+<li><a href='register.php'>Register</a></li>
+<li><a href='login.php'>Login</a></li>
 <?php
-echo dom\mkAvailMenus($role);
+if (isset($user)) {
+	echo "<li><a href='logout.php'>Logout</a></li>";
+}
 ?>
-<?php
+</ul>
+<?php 
 if (isset($user, $name, $role, $surn)) {
 	echo dom\mkNavDom($user, $role, $name, $surn);
 } else {
-	echo dom\mkNavNotLogged();
+	echo "Not logged in.";
 }
 ?>
 </div>

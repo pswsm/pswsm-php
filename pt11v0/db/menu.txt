@@ -1,0 +1,8 @@
+id;category;name;price
+001;appetiser;croquetes;7
+002;appetiser;braves;4
+003;appetiser;pa amb tomàquet;3
+004;appetiser;pa de coca;1
+005;appetiser;calamars a la romana;8
+006;maincourse;lingot de cavall;13
+007;appetiser;eriçó de mar;10
