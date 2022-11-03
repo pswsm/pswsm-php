@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +13,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<?php require_once "../topmenu.php" ?>
+<?php require_once "./topmenu.php" ?>
 <h2>PERMISSION DENIED</h2>
 </body>
 </html>

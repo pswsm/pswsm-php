@@ -17,7 +17,7 @@ if (!(in_array($_SESSION["rol"], $allowedRoles))) {
 	<title>Admin Menus</title>
 </head>
 <body>
-<?php require_once("../topmenu.php") ?>
+<?php require_once("\./topmenu.php") ?>
 	<h1>Welcome to the Admin Menus!</h1>
 	<p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
 </body>

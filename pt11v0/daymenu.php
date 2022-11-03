@@ -11,7 +11,7 @@
     </head>
     <body>
     <div class="container-fluid">
-        <?php include_once "../topmenu.php";?>
+        <?php include_once "\./topmenu.php";?>
         <div class="container">
         <h2>Day menu</h2>
 <p>

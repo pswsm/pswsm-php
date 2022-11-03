@@ -4,10 +4,10 @@ function mkNavDom(string $user = '', string $role = '', string $name = '', strin
 	$login = mkMenu("Login", "login.php");
 	$logout = mkMenu("Logout", "logout.php");
 	$home = mkMenu("Home", "index.php");
-	$daymenu = mkMenu("Day Menu", "menus/daymenu.php");
-	$viewmenu = mkMenu("View Menus", "menus/viewmenus.php");
-	$admmenus = mkMenu("Admin Menus", "menus/adminmenus.php");
-	$admusers = mkMenu("Admin Users", "menus/adminusers.php");
+	$daymenu = mkMenu("Day Menu", "daymenu.php");
+	$viewmenu = mkMenu("View Menus", "viewmenus.php");
+	$admmenus = mkMenu("Admin Menus", "adminmenus.php");
+	$admusers = mkMenu("Admin Users", "adminusers.php");
 	$persinfo = "$name $surname";
 	$userinfo = "Logged in as: $user.";
 	$roleinfo = "You are: $role";
