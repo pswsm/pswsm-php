@@ -28,7 +28,7 @@ function userAuth(string $username, string $password, string $db = "/home/pswsm/
 				if ($retCode == 0 && !($line_kv["password"] == $password)) {
 					$retCode = 2;
 				}
-				if ($retCode == 0) {
+				if ($retCode != 1) {
 					fclose($fileHandle);
 					return $retCode;
 				}

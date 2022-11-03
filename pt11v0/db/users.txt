@@ -1,4 +1,3 @@
 pswsm;1234;administrator;Pau;Figueras
-juan;joan;registered;joan;joan
+joan;joan;registered;joan;joan
 josepll;josel;registered;"Josep Lluís";Llavors
-pswsm;pswsm;registered;pswsm;pswsm

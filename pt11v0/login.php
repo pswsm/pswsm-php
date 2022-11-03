@@ -26,6 +26,7 @@ if (filter_has_var(INPUT_POST, "loginsubmit")) {
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+<?php require_once "./topmenu.php" ?>
 <div class="container-fluid">
   <h2>Login form</h2>
   <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
