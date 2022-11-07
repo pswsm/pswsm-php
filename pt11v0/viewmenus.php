@@ -1,7 +1,7 @@
 <?php
 session_start();
 $allowedRoles = ["administrator", "staff", "registered"];
-if (!(in_array($_SESSION["rol"], $allowedRoles))) {
+if (!(in_array($_SESSION["role"], $allowedRoles))) {
 	header("location: error.php");
 }
 ?>
@@ -17,7 +17,7 @@ if (!(in_array($_SESSION["rol"], $allowedRoles))) {
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<?php require_once("\./topmenu.php") ?>
+<?php require_once("./topmenu.php") ?>
 	<h1>Available menus</h1>
 	<p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
 </body>

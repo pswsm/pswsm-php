@@ -1,7 +1,7 @@
 <?php
 session_start();
 $allowedRoles = ["administrator", "staff"];
-if (!(in_array($_SESSION["rol"], $allowedRoles))) {
+if (!(in_array($_SESSION["role"], $allowedRoles))) {
 	header("location: error.php");
 }
 ?>
