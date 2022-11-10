@@ -4,5 +4,13 @@ id;category;name;price
 003;appetiser;pa amb tomàquet;3
 004;appetiser;pa de coca;1
 005;appetiser;calamars a la romana;8
-006;maincourse;lingot de cavall;13
-007;appetiser;eriçó de mar;10
+100;firstcourse;amanida amb ous durs;9
+101;firstcourse;tartar de salmó amb tomàquet;12
+200;maincourse;lingot de cavall;17
+201;maincourse;eriçó de mar;15
+300;dessert;flam romà;7
+301;dessert;pastís de formatge;8
+302;dessert;crema catalana;9
+900;drink;aigua;2
+901;drink;refresc;2.5
+902;drink;cervesa;4

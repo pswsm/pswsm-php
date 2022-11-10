@@ -1,0 +1,7 @@
+001;appetiser;croquetes;7
+004;appetiser;pa de coca;1
+101;firstcourse;tartar de salmó amb tomàquet;12
+200;maincourse;lingot de cavall;17
+900;drink;aigua;2
+901;drink;refresc;2.5
+902;drink;cervesa;4

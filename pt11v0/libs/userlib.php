@@ -65,7 +65,14 @@ function userMake(string $username, string $password, string $name, string $surn
 	return 2;
 }
 
-function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): array|string {
+/*
+ * Gets the role from given user
+ *
+ * @param string $username The username of the user who we want the role
+ * @param string $db option Where are the users located
+ * @return array|int An array with the user data or an error code
+ */
+function getRole(string $username, string $db = "/home/pswsm/code/pswsm-php/pt11v0/db/users.txt"): array|int {
 	if (file_exists($db)) {
 		$fileHandle = fopen($db, "r");
 		while (!feof($fileHandle)) {

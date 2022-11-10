@@ -1,5 +1,9 @@
 <?php
 session_start();
+$user = $_SESSION['user'];
+$role = $_SESSION['role'];
+$name = $_SESSION['name'];
+$surn = $_SESSION['surname'];
 ?>
 <!DOCTYPE html>
 <html lang="en">

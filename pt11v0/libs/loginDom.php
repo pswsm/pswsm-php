@@ -1,5 +1,11 @@
 <?php namespace practica\dom {
-
+/*
+ * Makes the login dom
+ *
+ * @param int $uAuth The return code from authentication
+ * @param array $userData The user's data to set in the session if needed
+ * @return ?string Sets session vars if OK, prints help message if not
+ */
 function mkLogin( int $uAuth, array $userData):?string {
 	switch ($uAuth) {
 		case 0:

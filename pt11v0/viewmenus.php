@@ -1,9 +1,15 @@
 <?php
+require_once "./libs/menuviewer.php";
+use practica\dom as dom;
 session_start();
 $allowedRoles = ["administrator", "staff", "registered"];
 if (!(in_array($_SESSION["role"], $allowedRoles))) {
 	header("location: error.php");
 }
+$user = $_SESSION['user'];
+$role = $_SESSION['role'];
+$name = $_SESSION['name'];
+$surn = $_SESSION['surname'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +25,6 @@ if (!(in_array($_SESSION["role"], $allowedRoles))) {
 <body>
 <?php require_once("./topmenu.php") ?>
 	<h1>Available menus</h1>
-	<p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+<?php echo dom\mkViewMenu(db: "./db/menu.txt"); ?>
 </body>
 </html>

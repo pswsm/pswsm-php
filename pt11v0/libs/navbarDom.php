@@ -1,4 +1,13 @@
 <?php namespace practica\dom {
+/*
+ * Makes the navbar according to bootstrap and how it was originally
+ *
+ * @param string $user The user
+ * @param string $role The role of the user
+ * @param string $name The name of the user
+ * @param string $surname The surname of the user
+ * @return string The dom for the navbar
+ */
 function mkNavDom(string $user = '', string $role = '', string $name = '', string $surname = ''): string {
 	$register = mkMenu("Register", "register.php");
 	$login = mkMenu("Login", "login.php");
@@ -33,6 +42,13 @@ function mkNavDom(string $user = '', string $role = '', string $name = '', strin
 	return $nav;
 }
 
+/*
+ * Makes a clickable menu for the navbar
+ *
+ * @param string $title The title of the menu
+ * @param string $href Where the link points to
+ * @return string The DOM for a single menu
+ */
 function mkMenu(string $title, string $href): string {
 	return "<li><a href=$href>$title</a></li>";
 }

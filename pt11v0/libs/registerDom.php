@@ -1,4 +1,11 @@
 <?php namespace practica\dom {
+/*
+ * Makes the DOM for the register page responses
+ *
+ * @param string $username The username to register
+ * @param int $regRetCode The return code of the register function
+ * @return string The dom for the given return code
+ */
 function domRegistered(string $username, int $regRetCode): string {
 	$dom = "";
 	switch ($regRetCode) {

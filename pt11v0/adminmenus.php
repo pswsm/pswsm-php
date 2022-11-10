@@ -4,6 +4,10 @@ $allowedRoles = ["administrator", "staff"];
 if (!(in_array($_SESSION["role"], $allowedRoles))) {
 	header("location: error.php");
 }
+$user = $_SESSION['user'];
+$role = $_SESSION['role'];
+$name = $_SESSION['name'];
+$surn = $_SESSION['surname'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +21,7 @@ if (!(in_array($_SESSION["role"], $allowedRoles))) {
 	<title>Admin Menus</title>
 </head>
 <body>
-<?php require_once("\./topmenu.php") ?>
+<?php require_once("./topmenu.php") ?>
 	<h1>Welcome to the Admin Menus!</h1>
 	<p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
 </body>
