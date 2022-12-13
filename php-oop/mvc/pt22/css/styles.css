@@ -62,3 +62,7 @@ table a:hover {
     color: yellow;
     float: left;
 }
+
+.right-nav {
+    float: right;
+}

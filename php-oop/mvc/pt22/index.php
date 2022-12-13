@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <title>Store application</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css"> 
-  </head>
+  </head> 
   <body>
       <?php
         include "views/topmenu.html";
@@ -17,7 +17,7 @@
             echo "Logged user: ".$_SESSION['username'];
         }
       ?>
-      <!-- <h2>Store application</h2> -->
+      <h2>Store application</h2>
       <?php
         //dynamic html content generated here by controller.
         require_once 'controllers/MainController.php';

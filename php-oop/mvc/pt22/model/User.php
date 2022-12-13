@@ -7,8 +7,8 @@
  */
 class User {
 
-    private int $id; //PK
-    private ?string $username; //UNIQUE
+    private int $id; // "PK"
+    private ?string $username; // UNIQUE
     private ?string $password;
     private ?string $role;
     private ?string $name;
