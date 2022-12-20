@@ -13,35 +13,29 @@ class UserFormValidation {
      * validates and gets data from User form.
      * @return User the User with the given data or null if data is not present and valid.
      */
-	public static function getData() {
+	public static function getData(): User {
 		$fileDao = new UserPersistFileDao('files/users.txt', ';');
+		$users = $fileDao->selectAll();
         $UserObj = null;
-        $id = $fileDao->getNextId() + 1;
+        // $id = $fileDao->getNextId();
 
-        $username = "";
         //retrieve id sent by client.
-        if (filter_has_var(INPUT_POST, 'username')) {
-            $username = htmlspecialchars($_POST['username']); 
-        }
-        $password = "";
-        //retrieve User sent by client.
-        if (filter_has_var(INPUT_POST, 'password')) {
-            $password = htmlspecialchars($_POST['password']); 
-        }
-        $name = "";
-        //retrieve User sent by client.
-        if (filter_has_var(INPUT_POST, 'name')) {
-            $name = htmlspecialchars($_POST['name']);
-        }
-        $surname = "";
-        //retrieve User sent by client.
-        if (filter_has_var(INPUT_POST, 'surname')) {
-            $surname = htmlspecialchars($_POST['surname']); 
-        }
-        //if (!empty($id) && !empty($password) && !empty($name)) { 
-            //they exists and they are not empty
-            $UserObj = new User($id, $username, $password, 'registered', $name, $surname);
-        //}
+		$id = (filter_has_var(INPUT_POST, 'idadd')) ? htmlspecialchars($_POST['idadd']) : throw new Exception("id invalid");
+		$username = (filter_has_var(INPUT_POST, 'usernameadd')) ? htmlspecialchars($_POST['usernameadd']) : throw new Exception("username invalid");
+		$password = (filter_has_var(INPUT_POST, 'passwordadd')) ? htmlspecialchars($_POST['passwordadd']) : throw new Exception("password invalid");
+		$name = (filter_has_var(INPUT_POST, 'nameadd')) ? htmlspecialchars($_POST['nameadd']) : throw new Exception("name invalid");
+		$surname = (filter_has_var(INPUT_POST, 'surnameadd')) ? htmlspecialchars($_POST['surnameadd']) : throw new Exception("surname invalid");
+
+		// Validate id and username are unique
+		foreach ($users as $user) {
+			if ($user->getId() == $id) {
+				throw new Exception("ID already exists");
+			} else if ($user->getUsername() === $username) {
+				throw new Exception("Username already exists");
+			}
+		}
+
+		$UserObj = new User($id, $username, $password, 'registered', $name, $surname);
         return $UserObj;
     }
     
@@ -49,36 +43,41 @@ class UserFormValidation {
 	 * retrieves and validates the data from the login form
 	 * @return array This array: [username => ..., password => ...]
      */
-	public static function getLoginData() {
-		$fileDao = new UserPersistFileDao('files/users.txt', ';');
-        $UserObj = null;
-        $id = $fileDao->getNextId() + 1;
-
-        $username = "";
+	public static function getLoginData(): array {
         //retrieve id sent by client.
-        if (filter_has_var(INPUT_POST, 'username')) {
-            $username = htmlspecialchars($_POST['username']); 
+        if (filter_has_var(INPUT_POST, 'username') && filter_has_var(INPUT_POST, 'password')) {
+			$username = htmlspecialchars($_POST['username']);
+			$password = htmlspecialchars($_POST['password']);
         }
-        $password = "";
-        //retrieve User sent by client.
-        if (filter_has_var(INPUT_POST, 'password')) {
-            $password = htmlspecialchars($_POST['password']); 
-        }
-        $name = "";
-        //retrieve User sent by client.
-        if (filter_has_var(INPUT_POST, 'name')) {
-            $name = htmlspecialchars($_POST['name']);
-        }
-        $surname = "";
-        //retrieve User sent by client.
-        if (filter_has_var(INPUT_POST, 'surname')) {
-            $surname = htmlspecialchars($_POST['surname']); 
-        }
-        //if (!empty($id) && !empty($password) && !empty($name)) { 
-            //they exists and they are not empty
-            $UserObj = new User($id, $username, $password, 'registered', $name, $surname);
-        //}
-        return $UserObj;
-    }
+		return ['username' => $username, 'password' => $password];
+	}
+
+	public static function getFindData(): User {
+		$fileDao = new UserPersistFileDao('files/users.txt', ';');
+		if (filter_has_var(INPUT_POST, 'id')) {
+			$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+		} else {
+			throw new Exception("No ID provided");
+		}
+		$user = $fileDao->searchUserById($id);
+		if (!is_null($user)) {
+			return $user;
+		} else {
+			throw new Exception("User not found");
+		}
+	}
+
+	public static function getModDelData(): User {
+		// $fileDao = new UserPersistFileDao('files/users.txt', ';');
+		$id = (filter_has_var(INPUT_POST, 'id')) ? htmlspecialchars($_POST['id']) : throw new Exception("id invalid");
+		$username = (filter_has_var(INPUT_POST, 'username')) ? htmlspecialchars($_POST['username']) : throw new Exception("username invalid");
+		$password = (filter_has_var(INPUT_POST, 'password')) ? htmlspecialchars($_POST['password']) : throw new Exception("password invalid");
+		$role = (filter_has_var(INPUT_POST, 'role')) ? htmlspecialchars($_POST['role']) : throw new Exception("role invalid");
+		$name = (filter_has_var(INPUT_POST, 'name')) ? htmlspecialchars($_POST['name']) : throw new Exception("name invalid");
+		$surname = (filter_has_var(INPUT_POST, 'surname')) ? htmlspecialchars($_POST['surname']) : throw new Exception("surname invalid");
+
+		$updatedUser = new User($id, $username, $password, $role, $name, $surname);
+		return $updatedUser;
+	}
     
 }

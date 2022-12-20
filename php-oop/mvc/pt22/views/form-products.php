@@ -1,11 +1,34 @@
-<form action="index.php" method="POST">
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="username">Product Name:</label>
-        <input type="text" class="form-control" id="username" placeholder="Potato" name="potato" required>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="password">Price:</label>
-        <input type="password" class="form-control" id="number" placeholder="0.99" name="price" required>
-    </div>
-    <button type="submit" name="action" value="product/add">Submit</button>
+<form method="POST" action="index.php">
+<div class="form-group">
+	<label for="id">ID:</label>
+	<input type="number" name="id" id="id" placeholder="enter id" value="<?php echo (isset($params['user'])) ? $params['user']->getId() : ''; ?>" <?php echo (isset($params['user'])) ? 'readonly' : ''; ?>/>
+</div>
+<div class="form-group">
+	<label for="desc">Description:</label>
+	<input type="text" name="desc" id="desc" placeholder="enter description" value="<?php echo (isset($params['user'])) ? $params['user']->getDesc() : ''; ?>"/>
+</div>
+<div class="form-group">
+	<label for="price">Price:</label>
+	<input type="number" name="price" id="price" placeholder="enter price" value="<?php echo (isset($params['user'])) ? $params['user']->getPrice() : ''; ?>"/>
+</div>
+<div class="form-group">
+	<label for="stock">Stock:</label>
+	<input type="number" name="stock" id="stock" placeholder="enter stock" value="<?php echo (isset($params['user'])) ? $params['user']->getStock() : ''; ?>"/>
+</div>
+<div class="form-group">
+	<button type="submit" name="action" value='product/add'>Add</button>
+	<button type="submit" name="action" value='product/find'>Find</button>
+	<button type="submit" name='action' value='product/modify'>Modify</button>
+	<button type="submit" name="action" value="product/remove">Remove</button>
+	<button type="reset">Reset</button>
+</div>
 </form>
+
+<?php
+$result = $params['result']??null;
+if (!is_null($result)) {
+    echo <<<EOT
+    <div><p class="alert">$result</p></div>
+EOT;
+} 
+?>

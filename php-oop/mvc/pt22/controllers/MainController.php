@@ -1,6 +1,7 @@
 <?php
 require_once 'lib/ViewLoader.php';
 require_once 'lib/UserFormValidator.php';
+require_once 'lib/ProductFormValidator.php';
 require_once 'model/Model.php';
 require_once 'model/persist/UserPersistFileDao.php';
 /**
@@ -62,6 +63,9 @@ class MainController
             case 'login/form':
                 $this->showLoginForm();
                 break;
+            case 'logout':
+                $this->doLogout();
+                break;
             default:
                 $this->doHomePage();
                 break;
@@ -78,15 +82,33 @@ class MainController
             case 'home':
                 $this->doHomePage();
                 break;
-            case 'product/add':
-                $this->doAddProduct();
-                break;
             case 'user/add':
                 $this->doAddUser();
                 break;
-            case 'login/form':
+            case 'user/login':
                 $this->doLoginUser();
+				break;
+			case 'user/find':
+				$this->doFindUser();
+				break;
+			case 'user/modify':
+				$this->doModUser();
+				break;
+			case 'user/remove':
+				$this->doDelUser();
+				break;
+            case 'product/add':
+                $this->doAddProduct();
                 break;
+			case 'product/find':
+				$this->doFindProduct();
+				break;
+			case 'product/modify':
+				$this->doModProduct();
+				break;
+			case 'product/remove':
+				$this->doDelProduct();
+				break;
             default:
                 $this->doHomePage();
                 break;
@@ -99,32 +121,46 @@ class MainController
         $this->view->show('home.php');
     }
 
-    private function doListAllProducts() {
-        $productLists = $this->model->searchAllProducts();
-        $data['products_list'] = $productLists;
-        $this->view->show('list-products.php', $data);
-	}
-
     private function doFormUser() {
-        $user = UserFormValidation::getData();
-        $data['user'] = $user;
-        $data['action'] = $this->action;
-        $this->view->show('form-users.php', $data);
-    }
+		if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+			$this->view->show('form-users.php');
+		} else {
+			$this->view->show('home.php');
+		}
+	}
 
     /**
      *  List all users from data source
      */
     private function doListAllUsers() {
-        $userList = $this->model->searchAllUsers();
-        if (!is_null($userList)) {
-            $data['userList'] = $userList;
-            $this->view->show("list-users.php", $data);
-        } else {
-            $data['userList'] = array();
-            $data['message'] = "Data is null";
-            $this->view->show("list-users.php", $data);
-        }
+		$userList = $this->model->searchAllUsers();
+		if (isset($_SESSION['role']) && ($_SESSION['role'] === 'staff' || $_SESSION['role'] === 'admin')) {
+			if (!is_null($userList)) {
+				$data['userList'] = $userList;
+				$this->view->show("list-users.php", $data);
+			} else {
+				$data['userList'] = array();
+				$data['message'] = "Data is null";
+				$this->view->show("list-users.php", $data);
+			}
+		} else {
+			$this->view->show('home.php');
+		}
+	}
+
+    /**
+     *  List all users from data source
+     */
+    private function doListAllProducts() {
+		$prodList = $this->model->searchAllProds();
+		if (!is_null($prodList)) {
+			$data['prodList'] = $prodList;
+			$this->view->show("list-products.php", $data);
+		} else {
+			$data['prodList'] = array();
+			$data['message'] = "Data is null";
+			$this->view->show("list-products.php", $data);
+		}
 	}
 
 	private function showLoginForm() {
@@ -134,44 +170,179 @@ class MainController
     /**
      * Displays page with product form
      */
-    private function doProductForm() {
-        $this->view->show('form-products.php');
+	private function doProductForm() {
+		if (isset($_SESSION['role']) && ($_SESSION['role'] === 'staff' || $_SESSION['role'] === 'admin')) {
+			$this->view->show('form-products.php');
+		} else {
+			$this->view->show('home.php');
+		}
+	}
+
+	private function doLogout() {
+		$this->view->show('home.php');
+		if (isset($_COOKIE["PHPSESSID"])) {
+			session_unset();
+			session_destroy();
+			header("Location: index.php");
+		}
 	}
 
 	#endregion get methods
 
 	#region post methods
 
-    private function doAddProduct() {
-        $data['message'] = "Add product not implemented";
-        $this->view->show('not-implemented.php', $data);
-    }
-	
 	/**
 	 * Adds a user
 	 */
     public function doAddUser() {
-        $user = UserFormValidation::getData();
-        $result = null;
-        if (is_null($user)) {
-            $result = "Error reading user";
-        } else {
-            $numAffected = $this->model->addItem($user);
+		try {
+			$user = UserFormValidation::getData();
+		} catch (Exception $th) {
+			$result = $th->getMessage();
+		}
+
+		if (isset($result)) {
+			$data['result'] = $result;
+			$this->view->show('form-users.php', $data);
+		} else {
+			$numAffected = $this->model->addItem($user);
             if ($numAffected>0) {
                 $result = "User successfully added";
-            } else {
-                $result = "Error adding user";
-            }            
-        }
-        //pass data to template.
-        $data['result'] = $result;
-        //show the template with the given data.
-        $this->view->show("form-users.php", $data);
+            }
+			$data['result'] = 'User successfully added';
+			$this->view->show('form-users.php', $data);
+		}
 	}
 
 	public function doLoginUser() {
 		$loginData = UserFormValidation::getLoginData();
-		$this->model->loginUser($loginData['username'], $loginData['password']);
+		$loginRes = $this->model->loginUser($loginData['username'], $loginData['password']);
+		if (is_int($loginRes)) {
+			$params['message'] = ($loginRes === 1) ? 'User not found' : 'Incorrect password';
+			$this->view->show('login.php', $params);
+		} else {
+			$_SESSION['username'] = $loginRes->getUsername();
+			$_SESSION['role'] = $loginRes->getRole();
+			$this->view->show('home.php');
+			header('Location: index.php');
+		}
+	}
+
+	public function doFindUser() {
+		try {
+			$data['user'] = UserFormValidation::getFindData();
+		} catch (Exception $ex) {
+			$data['result'] = $ex->getMessage();
+		}
+		$this->view->show('form-users.php', $data);
+	}
+
+	public function doModUser() {
+		try {
+			$modUser = UserFormValidation::getModDelData();
+			try {
+				$altObjs = $this->model->modUser($modUser);
+			} catch (Exception $ex) {
+				$data['result'] = $ex->getMessage();
+				//$this->view->show('form-users.php', $data);
+			}
+			if ($altObjs > 0) {
+				$data['result'] = 'User edited ok.';
+			}
+		} catch (Exception $ex) {
+			$data['result'] = $ex->getMessage();
+			//$this->view->show('form-users.php', $data);
+		}
+		$this->view->show('form-users.php', $data);
+	}
+
+	public function doDelUser() {
+		try {
+			$delUser = UserFormValidation::getModDelData();
+			try {
+				$altObjs = $this->model->delUser($delUser);
+			} catch (Exception $ex) {
+				$data['result'] = $ex->getMessage();
+				//$this->view->show('form-users.php', $data);
+			}
+			if ($altObjs > 0) {
+				$data['result'] = 'User deleted ok.';
+			}
+		} catch (Exception $ex) {
+			$data['result'] = $ex->getMessage();
+			//$this->view->show('form-users.php', $data);
+		}
+		$this->view->show('form-users.php', $data);
+	}
+
+	/**
+	 * Adds a product
+	 */
+    public function doAddProduct() {
+		try {
+			$prod = ProductFormValidation::getData();
+		} catch (Exception $th) {
+			$result = $th->getMessage();
+		}
+
+		if (isset($result)) {
+			$data['result'] = $result;
+			$this->view->show('form-products.php', $data);
+		} else {
+			$numAffected = $this->model->addProduct($prod);
+            if ($numAffected>0) {
+                $result = "Product successfully added";
+            }
+			$data['result'] = 'Product successfully added';
+			$this->view->show('form-products.php', $data);
+		}
+	}
+
+	public function doFindProduct() {
+		try {
+			$data['user'] = ProductFormValidation::getFindData();
+		} catch (Exception $ex) {
+			$data['result'] = $ex->getMessage();
+		}
+		$this->view->show('form-products.php', $data);
+	}
+
+	public function doModProduct() {
+		try {
+			$modProd = ProductFormValidation::getData();
+			try {
+				$altObjs = $this->model->modProd($modProd);
+			} catch (Exception $ex) {
+				$data['result'] = $ex->getMessage();
+				//$this->view->show('form-users.php', $data);
+			}
+			if ($altObjs > 0) {
+				$data['result'] = 'Product edited ok.';
+			}
+		} catch (Exception $ex) {
+			$data['result'] = $ex->getMessage();
+			//$this->view->show('form-users.php', $data);
+		}
+		$this->view->show('form-products.php', $data);
+	}
+
+	public function doDelProduct() {
+		try {
+			$delProd = ProductFormValidation::getData();
+			try {
+				$altObjs = $this->model->delProd($delProd);
+			} catch (Exception $ex) {
+				$data['result'] = $ex->getMessage();
+				//$this->view->show('form-users.php', $data);
+			}
+			if ($altObjs > 0) {
+				$data['result'] = 'Product deleted ok.';
+			}
+		} catch (Exception $ex) {
+			$data['result'] = $ex->getMessage();
+			//$this->view->show('form-users.php', $data);
+		}
+		$this->view->show('form-products.php', $data);
 	}
 
 	#endregion post methods

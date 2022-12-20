@@ -1,3 +1,4 @@
-1;pau;pau;registered;Pau;Figueras
-3;gabi;gabi;registered;gabi;f
-5;victor;victor;registered;victor;p
+1;pau;pau;admin;Pau;Figueras
+2;test1;test;registered;test;test
+6;test2;test;registered;test;test
+3;gabi;gabi;staff;gabi;gabi

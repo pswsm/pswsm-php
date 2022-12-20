@@ -1,11 +1,11 @@
 <?php
-require_once "model/User.php";
+require_once "model/Product.php";
 /**
  *  DAO for user persistence in file.
  *
  * @author ProvenSoft
  */
-class UserPersistFileDao
+class ProductPersistFileDao
 {
 
     /**
@@ -46,14 +46,14 @@ class UserPersistFileDao
     }
 
     /**
-	 * Reuturns the next ID (highes ID + 1)
+	 * Reuturns the next ID (highest ID + 1)
 	 * @return int The next ID number
      */
 	public function getNextId(): int {
 		$list = $this->selectAll();
 		$id = -1;
-		foreach ($list as $user) {
-			($user->getId() > $id) ? $id = $user->getId() : $id = $id;
+		foreach ($list as $prod) {
+			($prod->getId() > $id) ? $id = $prod->getId() : $id = $id;
 		}
         return $id + 1;
     }
@@ -63,7 +63,7 @@ class UserPersistFileDao
      * @param User $obj the object to get from file.
      * @return object from file equal to the given one or null if not found.
      */
-    public function select(User $obj): ?User
+    public function select(Product $obj): ?Product
     {
         $resultObj = null;
         //get all data.
@@ -99,7 +99,7 @@ class UserPersistFileDao
      * @param User $obj the object to insert.
      * @return number of objects written.
      */
-    public function insert(User $obj): int
+    public function insert(Product $obj): int
     {
         $handle = fopen($this->filename, "a"); //open file to read.
         //convert object to csv.
@@ -113,7 +113,7 @@ class UserPersistFileDao
      * @param User $obj the object to delete.
      * @return number of objects deleted.
      */
-    public function delete(User $obj): int {
+    public function delete(Product $obj): int {
         $result = 0;
         //get all data.
         $objList = $this->selectAll();
@@ -132,7 +132,7 @@ class UserPersistFileDao
      * @param  User $obj the object to update.
      * @return number of objects updated.
      */
-    public function update(User $obj): int
+    public function update(Product $obj): int
     {
         $result = 0;
         //get all data.
@@ -153,7 +153,7 @@ class UserPersistFileDao
      * @param User $obj the object to search.
      * @return int object position or -1 if not found.
      */
-    private function arraySearchIndex(array $list, User $obj): int {
+    private function arraySearchIndex(array $list, Product $obj): int {
         $index = -1;
         for ($i = 0; $i < count($list); $i++) {
             if ($list[$i]->getId() == $obj->getId()) {
@@ -163,64 +163,32 @@ class UserPersistFileDao
         return $index;
 	}
 
-	/**
-	 * Authenticate user
-	 *
-	 * @param string $username	The username
-	 * @param string $password	The password
-	 * @return User|int			Returns:
-	 * 								User => The user to be logged as
-	 * 								1 => Username not found
-	 * 								2 => Username OK, password not correct
-	 */
-	public function doLogin(string $username, string $password): User|int {
-		$users = $this->selectAll();
-		$userNotFound = false;
+	public function searchProdById(int $id): ?Product {
+		$prods = $this->selectAll();
+		$prodNotFound = false;
 		$index = 0;
-		$userObj = null;
+		$prodObj = null;
 		do {
-			$retCode = 1;
-			if ($username == $users[$index]->getUsername()) {
-				$retCode = 0;
-			}
-			if ($retCode == 0 && $password == $users[$index]->getPassword()) {
-				$userObj = $users[$index];
-				$userNotFound = false;
+			if ($id == $prods[$index]->getId()) {
+				$prodObj = $prods[$index];
 			}
 			$index++;
-		} while ($userNotFound || $index < count($users));
-		if (is_null($userObj)) {
-			return $retCode;
-		}
-		return $userObj;
+		} while ($prodNotFound || $index < count($prods));
+		return $prodObj;
 	}
 
-	public function searchUserById(int $id): ?User {
-		$users = $this->selectAll();
-		$userNotFound = false;
+	public function searchProdByDesc(int $desc): ?Product {
+		$prods = $this->selectAll();
+		$prodNotFound = false;
 		$index = 0;
-		$userObj = null;
+		$prodObj = null;
 		do {
-			if ($id == $users[$index]->getId()) {
-				$userObj = $users[$index];
+			if ($desc == $prods[$index]->getDesc()) {
+				$prodObj = $prods[$index];
 			}
 			$index++;
-		} while ($userNotFound || $index < count($users));
-		return $userObj;
-	}
-
-	public function searchUserByUsername(int $username): ?User {
-		$users = $this->selectAll();
-		$userNotFound = false;
-		$index = 0;
-		$userObj = null;
-		do {
-			if ($username == $users[$index]->Username) {
-				$userObj = $users[$index];
-			}
-			$index++;
-		} while ($userNotFound || $index < count($users));
-		return $userObj;
+		} while ($prodNotFound || $index < count($prods));
+		return $prodObj;
 	}
 
     /**
@@ -228,14 +196,12 @@ class UserPersistFileDao
      * @param $fields array, the fields to convert to object.
      * @return object or null in case of error.
      */
-    protected function fromFieldsToObj(array $fields): ?User {
+    protected function fromFieldsToObj(array $fields): ?Product {
         $id       = intval($fields[0]);
         $username = $fields[1];
         $password = $fields[2];
         $role     = $fields[3];
-        $name     = $fields[4];
-        $surname  = $fields[5];
-        $obj = new User($id, $username, $password, $role, $name, $surname);
+        $obj = new Product($id, $username, $password, $role);
         return $obj;
 	}
 }
