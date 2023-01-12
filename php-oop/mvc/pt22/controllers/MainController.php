@@ -7,7 +7,8 @@ require_once 'model/persist/UserPersistFileDao.php';
 /**
  * Main controller for store application.
  *
- * @author TheVic489
+ * @author Pau Figueras
+ * @github https://github.com/pswsm
  */
 class MainController
 {
@@ -39,6 +40,9 @@ class MainController
         }
     }
 
+	/**
+	 * Process GET petitions
+	 */
     public function processGET() {
         $this->action = "";
         if (filter_has_var(INPUT_GET, 'action')) {
@@ -64,7 +68,7 @@ class MainController
                 $this->showLoginForm();
                 break;
             case 'logout':
-                $this->doLogout();
+                $this->showLogout();
                 break;
             default:
                 $this->doHomePage();
@@ -72,6 +76,9 @@ class MainController
         }
     }
 
+	/**
+	 * Process POST petitions
+	 */
     public function proccesPOST()
     {
         $this->action = "";
@@ -109,6 +116,9 @@ class MainController
 			case 'product/remove':
 				$this->doDelProduct();
 				break;
+			case 'user/logout':
+				$this->doLogout();
+				break;
             default:
                 $this->doHomePage();
                 break;
@@ -117,10 +127,16 @@ class MainController
 
 	#region get methods
 
+	/*
+	 * Load home page
+	 */
     private function doHomePage() {
         $this->view->show('home.php');
     }
 
+	/*
+	 * Load user add, modify and delete form
+	 */
     private function doFormUser() {
 		if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
 			$this->view->show('form-users.php');
@@ -149,7 +165,7 @@ class MainController
 	}
 
     /**
-     *  List all users from data source
+     *  List all products from data source
      */
     private function doListAllProducts() {
 		$prodList = $this->model->searchAllProds();
@@ -163,6 +179,9 @@ class MainController
 		}
 	}
 
+	/*
+	 * Show the login form
+	 */
 	private function showLoginForm() {
 		$this->view->show('login.php');
 	}
@@ -178,12 +197,14 @@ class MainController
 		}
 	}
 
-	private function doLogout() {
-		$this->view->show('home.php');
-		if (isset($_COOKIE["PHPSESSID"])) {
-			session_unset();
-			session_destroy();
-			header("Location: index.php");
+	/*
+	 * Load logout page
+	 */
+	private function showLogout() {
+		if (isset($_SESSION['username'])) {
+			$this->view->show('logout.php');
+		} else {
+			$this->view->show('home.php');
 		}
 	}
 
@@ -191,8 +212,12 @@ class MainController
 
 	#region post methods
 
+	/*
+	 * Both product and user controllers are essentially the same, wiht minor adaptations
+	 */
+
 	/**
-	 * Adds a user
+	 * Adds a user controller
 	 */
     public function doAddUser() {
 		try {
@@ -214,6 +239,9 @@ class MainController
 		}
 	}
 
+	/**
+	 * Login controller function
+	 */
 	public function doLoginUser() {
 		$loginData = UserFormValidation::getLoginData();
 		$loginRes = $this->model->loginUser($loginData['username'], $loginData['password']);
@@ -228,6 +256,10 @@ class MainController
 		}
 	}
 
+
+	/**
+	 * User finding controller, for the user form
+	 */
 	public function doFindUser() {
 		try {
 			$data['user'] = UserFormValidation::getFindData();
@@ -237,6 +269,10 @@ class MainController
 		$this->view->show('form-users.php', $data);
 	}
 
+	/**
+	 * User modification controller.
+	 * Gets the data from the form and calls model->modUser() with the resulting user as param
+	 */
 	public function doModUser() {
 		try {
 			$modUser = UserFormValidation::getModDelData();
@@ -256,6 +292,10 @@ class MainController
 		$this->view->show('form-users.php', $data);
 	}
 
+	/**
+	 * User deletion handle
+	 * Gets the data from the form and calls model->delUser() with the resulting user as param
+	 */
 	public function doDelUser() {
 		try {
 			$delUser = UserFormValidation::getModDelData();
@@ -276,7 +316,7 @@ class MainController
 	}
 
 	/**
-	 * Adds a product
+	 * Product addition controller
 	 */
     public function doAddProduct() {
 		try {
@@ -298,6 +338,9 @@ class MainController
 		}
 	}
 
+	/**
+	 * Finds a product from the forms ID
+	 */
 	public function doFindProduct() {
 		try {
 			$data['user'] = ProductFormValidation::getFindData();
@@ -307,6 +350,9 @@ class MainController
 		$this->view->show('form-products.php', $data);
 	}
 
+	/**
+	 * Product modification controller
+	 */
 	public function doModProduct() {
 		try {
 			$modProd = ProductFormValidation::getData();
@@ -326,6 +372,9 @@ class MainController
 		$this->view->show('form-products.php', $data);
 	}
 
+	/**
+	 * Product deleton controller
+	 */
 	public function doDelProduct() {
 		try {
 			$delProd = ProductFormValidation::getData();
@@ -343,6 +392,18 @@ class MainController
 			//$this->view->show('form-users.php', $data);
 		}
 		$this->view->show('form-products.php', $data);
+	}
+
+	/**
+	 * Logout controller
+	 */
+	private function doLogout() {
+		$this->view->show('home.php');
+		if (isset($_COOKIE["PHPSESSID"])) {
+			session_unset();
+			session_destroy();
+			header("Location: index.php");
+		}
 	}
 
 	#endregion post methods

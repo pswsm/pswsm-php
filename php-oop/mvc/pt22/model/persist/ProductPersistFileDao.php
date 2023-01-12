@@ -3,7 +3,7 @@ require_once "model/Product.php";
 /**
  *  DAO for user persistence in file.
  *
- * @author ProvenSoft
+ * @author Pau Figueras
  */
 class ProductPersistFileDao
 {
@@ -170,20 +170,6 @@ class ProductPersistFileDao
 		$prodObj = null;
 		do {
 			if ($id == $prods[$index]->getId()) {
-				$prodObj = $prods[$index];
-			}
-			$index++;
-		} while ($prodNotFound || $index < count($prods));
-		return $prodObj;
-	}
-
-	public function searchProdByDesc(int $desc): ?Product {
-		$prods = $this->selectAll();
-		$prodNotFound = false;
-		$index = 0;
-		$prodObj = null;
-		do {
-			if ($desc == $prods[$index]->getDesc()) {
 				$prodObj = $prods[$index];
 			}
 			$index++;

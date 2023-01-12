@@ -9,10 +9,10 @@ class Product {
 
     private int $id; // "PK"
     private ?string $desc; // UNIQUE
-    private ?int $price;
+    private ?float $price;
 	private ?int $stock;
 
-    public function __construct(int $id, string $desc = null, int $price = null, int $stock = null) {
+    public function __construct(int $id, string $desc = null, float $price = null, int $stock = null) {
         $this->id = $id;
         $this->desc = $desc;
         $this->price = $price;
@@ -27,7 +27,7 @@ class Product {
         return $this->desc;
     }
 
-    public function getPrice(): int {
+    public function getPrice(): float {
         return $this->price;
     }
 
@@ -43,7 +43,7 @@ class Product {
         $this->desc = $desc;
     }
 
-    public function setPrice(int $price): void {
+    public function setPrice(float $price): void {
         $this->price = $price;
     }
 
@@ -53,9 +53,9 @@ class Product {
 
     public function __toString(): string {
         $result = "Product{";
-        $result .= sprintf("[id=%s]", $this->id);
+        $result .= sprintf("[id=%d]", $this->id);
         $result .= sprintf("[desc=%s]", $this->desc);
-        $result .= sprintf("[price=%d]", $this->price);
+        $result .= sprintf("[price=%f]", $this->price);
         $result .= sprintf("[stock=%d]", $this->stock);
         $result .= "}";
         return $result;

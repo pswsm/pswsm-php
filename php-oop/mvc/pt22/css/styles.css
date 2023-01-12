@@ -18,6 +18,13 @@ nav li a {
     text-decoration: none;
 }
 
+nav li p {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+	padding: 0 16px;
+}
+
 nav li a:hover {
     background-color: #111;
 }

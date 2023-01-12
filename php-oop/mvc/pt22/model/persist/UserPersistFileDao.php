@@ -195,6 +195,11 @@ class UserPersistFileDao
 		return $userObj;
 	}
 
+	/**
+	 * Searches the user by ID
+	 * @param int $id The id of the desired User
+	 * @return ?User The user or null if not found
+	 */
 	public function searchUserById(int $id): ?User {
 		$users = $this->selectAll();
 		$userNotFound = false;
@@ -209,13 +214,18 @@ class UserPersistFileDao
 		return $userObj;
 	}
 
-	public function searchUserByUsername(int $username): ?User {
+	/**
+	 * Searches the user by it's username
+	 * @param string $username The username of the target User
+	 * @return ?User The user or null if not found
+	 */
+	public function searchUserByUsername(string $username): ?User {
 		$users = $this->selectAll();
 		$userNotFound = false;
 		$index = 0;
 		$userObj = null;
 		do {
-			if ($username == $users[$index]->Username) {
+			if ($username === $users[$index]->getUsername()) {
 				$userObj = $users[$index];
 			}
 			$index++;

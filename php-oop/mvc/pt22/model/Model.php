@@ -4,8 +4,7 @@ require_once 'persist/UserPersistFileDao.php';
 require_once 'persist/ProductPersistFileDao.php';
 
 /**
- * searches all products from data source
- * or an empty list if not found or error
+ * Interaction layer between controller and DAO
  */
 class Model
 {
@@ -23,6 +22,11 @@ class Model
         $this->prodDao = new ProductPersistFileDao($this->prodFile, $this->prodFileDelimiter);
     }
 
+	/**
+	 * In contradiction with it's name, it actually is called when adding a User.
+	 * @param User $user The user object to add
+	 * @return int The number of rows added
+	 */
     public function addItem(User $user): int {
         $numAffected = 0;
         if ($user !== null) {
@@ -31,6 +35,11 @@ class Model
         return $numAffected;
     }
 
+	/**
+	 * Wrapper funtion for userDao->searchAllUsers()
+	 * Returns an array of all users or null
+	 * @return ?array An array of users or null
+	 */
     public function searchAllUsers(): ?array {
         $data = $this->userDao->selectAll()??null;
         return $data;
@@ -78,6 +87,11 @@ class Model
 		return $alteredElems;
 	}
 
+	/**
+	 * Adds the given product
+	 * @param Product $prod The product to add
+	 * @return int The number of products added
+	 */
     public function addProduct(Product $prod): int {
         $numAffected = 0;
         if ($prod !== null) {
@@ -86,6 +100,11 @@ class Model
         return $numAffected;
     }
 
+	/**
+	 * Wrapper funtion for prodDao->searchAllProds()
+	 * Returns an array of all products or null
+	 * @return ?array An array of products or null
+	 */
     public function searchAllProds(): ?array {
         $data = $this->prodDao->selectAll()??null;
         return $data;
