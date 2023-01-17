@@ -141,7 +141,13 @@ class UserPdoDbDao
     public function update(User $entity): int
     {
         $numAffected = 0;
-        //TODO
+		try {
+			$connection = $this->userDb->getConnection();
+			$stmt = $connection->prepare($this->queries['UPDATE']);
+			// TODO: Get new fields from somewhere
+		} catch (\Throwable $th) {
+			//throw $th;
+		}
         return $numAffected;
     }
 
