@@ -38,10 +38,25 @@ class Renderer {
      */
     public static function renderUserFields(\user\model\User $user): string {
         $result = "<fieldset>";
-        $result .= self::renderLabelInput("Id: ", "id", $user->getId(), "disabled");
+        $result .= self::renderLabelInput("Id: ", "id", $user->getId(), "readonly");
         $result .= self::renderLabelInput("Username: ", "username", $user->getUsername());
         $result .= self::renderLabelInput("Password: ", "password", $user->getPassword());
         $result .= self::renderLabelInput("Role: ", "role", $user->getRole());
+        $result .= "</fieldset>";
+        return $result;
+    }
+    
+    /**
+     * renders fields for a user's form
+     * @param \user\model\User $user 
+     * @return string html representation of fields
+     */
+    public static function renderUpdateDFields(): string {
+        $result = "<fieldset>";
+        $result .= self::renderLabelInput("Id: ", "id", '');
+        $result .= self::renderLabelInput("Username: ", "username", '', "disabled");
+        $result .= self::renderLabelInput("Password: ", "password", '', "disabled");
+        $result .= self::renderLabelInput("Role: ", "role", '', "disabled");
         $result .= "</fieldset>";
         return $result;
     }

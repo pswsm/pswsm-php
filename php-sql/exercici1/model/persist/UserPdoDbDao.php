@@ -144,9 +144,17 @@ class UserPdoDbDao
 		try {
 			$connection = $this->userDb->getConnection();
 			$stmt = $connection->prepare($this->queries['UPDATE']);
-			// TODO: Get new fields from somewhere
-		} catch (\Throwable $th) {
+			$stmt->bindValue('username', $entity->getUsername(), \PDO::PARAM_STR);
+			$stmt->bindValue('password', $entity->getPassword(), \PDO::PARAM_STR);
+			$stmt->bindValue('role', $entity->getRole(), \PDO::PARAM_STR);
+			$stmt->bindValue('id', $entity->getId(), \PDO::PARAM_INT);
+			$success = $stmt->execute();
+			if ($success) {
+				$numAffected = 1;
+			}
+		} catch (\PDOException $ex) {
 			//throw $th;
+			$numAffected = 0;
 		}
         return $numAffected;
     }
