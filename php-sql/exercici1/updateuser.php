@@ -25,8 +25,16 @@
 			} else {
 				echo "<p>User not updated</p>";
 			}
+			echo "<form>";
+			echo lib\views\Renderer::renderUpdateDFields();
+			echo "<button type=submit>Search</button>";
+			echo "</form>";
 		} else {
 			echo "<p>Valid data shoud be provided</p>";
+			echo "<form>";
+			echo lib\views\Renderer::renderUpdateDFields();
+			echo "<button type=submit>Search</button>";
+			echo "</form>";
 		}            
 	} else {
 		if ($userId !== false) {
