@@ -2,9 +2,19 @@
 namespace proven\store\model;
 
 require_once 'model/persist/UserDao.php';
+require_once 'model/persist/CategoryDao.php';
+require_once 'model/persist/ProductDao.php';
+require_once 'model/persist/WarehouseDao.php';
 require_once 'model/User.php';
+require_once 'model/Category.php';
+require_once 'model/Product.php';
+require_once 'model/Warehouse.php';
 
+use proven\store\model\persist\CategoryDao;
+use proven\store\model\persist\ProductDao;
 use proven\store\model\persist\UserDao;
+use proven\store\model\persist\WarehouseDao;
+
 //use proven\store\model\User;
 
 /**
@@ -46,6 +56,21 @@ class StoreModel {
         $dbHelper = new UserDao();
         $u = new User($id);
         return $dbHelper->select($u);
-    }
+	}
+
+	public function findAllCategories(): array {
+		$dbHelper = new CategoryDao();
+		return $dbHelper->selectAll();
+	}
+
+	public function findAllProducts(): array {
+		$dbHelper = new ProductDao();
+		return $dbHelper->selectAll();
+	}
+
+	public function findAllWarehouses(): array {
+		$dbHelper = new WarehouseDao();
+		return $dbHelper->selectAll();
+	}
 }
 

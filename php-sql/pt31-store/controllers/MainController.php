@@ -253,8 +253,9 @@ class MainController {
      * displays category management page.
      */
     public function doCategoryMng() {
-        //TODO
-        $this->view->show("message.php", ['message' => 'Not implemented yet!']);
+		//TODO
+        $result = $this->model->findAllCategories();
+        $this->view->show("category/categorymanage.php", ['list' => $result]);
     }
 
     /* ============== PRODUCT MANAGEMENT CONTROL METHODS ============== */
@@ -264,7 +265,8 @@ class MainController {
      */
     public function doProductMng() {
         //TODO
-        $this->view->show("message.php", ['message' => 'Not implemented yet!']);
+        $result = $this->model->findAllProducts();
+        $this->view->show("product/productmanage.php", ['list' => $result]);
     }
 
     /**
@@ -272,7 +274,8 @@ class MainController {
      */
     public function doWarehouseMng() {
         //TODO
-        $this->view->show("message.php", ['message' => 'Not implemented yet!']);
+        $result = $this->model->findAllWarehouses();
+        $this->view->show("warehouse/warehousemanage.php", ['list' => $result]);
     }
     
 }

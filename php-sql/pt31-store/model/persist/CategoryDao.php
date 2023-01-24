@@ -2,19 +2,19 @@
 namespace proven\store\model\persist;
 
 require_once 'model/persist/StoreDb.php';
-require_once 'model/Product.php';
+require_once 'model/Category.php';
 
 use proven\store\model\persist\StoreDb as StoreDb;
-use proven\store\model\Product as Product;
+use proven\store\model\Category as Category;
 
 /**
- * Product db persistence class.
+ * Category db persistence class.
  * @author Pau Figueras
  */
-class ProductDao {
+class CategoryDao {
 	private StoreDb $dbConnect;
 
-	private static string $TABLE_NAME = 'products';
+	private static string $TABLE_NAME = 'categories';
 
 	private array $queries;
 
@@ -38,11 +38,11 @@ class ProductDao {
             self::$TABLE_NAME
         );
         $this->queries['INSERT'] = \sprintf(
-                "insert into %s (code, description, price, category_id) values (:code, :description, :price, :category_id)", 
+                "insert into %s (code, description) values (:code, :description)", 
                 self::$TABLE_NAME
         );
         $this->queries['UPDATE'] = \sprintf(
-                "update %s set code = :code, description = :description, price = :price, category_id = :category_id where id = :id", 
+                "update %s set code = :code, description = :description where id = :id", 
                 self::$TABLE_NAME
         );
         $this->queries['DELETE'] = \sprintf(
@@ -56,7 +56,7 @@ class ProductDao {
      * @param entity the entity to search.
      * @return entity object being searched or null if not found or in case of error.
      */
-    public function select(Product $entity): ?Product {
+    public function select(Category $entity): ?Category {
         $data = null;
         try {
             //PDO object creation.
@@ -75,7 +75,7 @@ class ProductDao {
                     // if ($u = $this->fetchToEntity($stmt)){
                     //     $data = $u;
                     // }
-                    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Product::class);
+                    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Category::class);
                     $data = $stmt->fetch();
                 } else {
                     $data = null;
@@ -110,10 +110,10 @@ class ProductDao {
             if ($success) {
                 if ($stmt->rowCount()>0) {
                    //fetch in class mode and get array with all data.                   
-                    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Product::class);
+                    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Category::class);
                     $data = $stmt->fetchAll(); 
                     //or in one single sentence:
-                    // $data = $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Product::class);
+                    // $data = $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Category::class);
                 } else {
                     $data = array();
                 }
@@ -147,10 +147,10 @@ class ProductDao {
             //Statement data recovery.
             if ($success) {
                 if ($stmt->rowCount()>0) {
-                    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Product::class);
+                    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Category::class);
                     $data = $stmt->fetchAll(); 
                     // //or in one single sentence:
-                    //$data = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Product');
+                    //$data = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Category');
                 } else {
                     $data = array();
                 }
@@ -171,7 +171,7 @@ class ProductDao {
      * @param entity the entity object to insert.
      * @return number of rows affected.
      */
-    public function insert(Product $entity): int {
+    public function insert(Category $entity): int {
         $numAffected = 0;
         try {
             //PDO object creation.
@@ -180,8 +180,6 @@ class ProductDao {
             $stmt = $connection->prepare($this->queries['INSERT']);
             $stmt->bindValue(':code', $entity->getCode(), \PDO::PARAM_STR);
             $stmt->bindValue(':description', $entity->getDescription(), \PDO::PARAM_STR);
-            $stmt->bindValue(':price', $entity->getPrice(), \PDO::PARAM_STR);
-            $stmt->bindValue(':category_id', $entity->getCategoryId(), \PDO::PARAM_STR);
             //query execution.
             $success = $stmt->execute(); //bool
             $numAffected = $success ? $stmt->rowCount() : 0;
@@ -199,7 +197,7 @@ class ProductDao {
      * @param entity the entity object to update.
      * @return number of rows affected.
      */
-    public function update(Product $entity): int {
+    public function update(Category $entity): int {
         $numAffected = 0;
         try {
             //PDO object creation.
@@ -208,8 +206,6 @@ class ProductDao {
             $stmt = $connection->prepare($this->queries['UPDATE']);
             $stmt->bindValue(':code', $entity->getCode(), \PDO::PARAM_STR);
             $stmt->bindValue(':description', $entity->getDescription(), \PDO::PARAM_STR);
-            $stmt->bindValue(':price', $entity->getPrice(), \PDO::PARAM_STR);
-            $stmt->bindValue(':category_id', $entity->getCategoryId(), \PDO::PARAM_STR);
             //query execution.
             $success = $stmt->execute(); //bool
             $numAffected = $success ? $stmt->rowCount() : 0;
@@ -227,7 +223,7 @@ class ProductDao {
      * @param entity the entity object to delete.
      * @return number of rows affected.
      */
-    public function delete(Product $entity): int {
+    public function delete(Category $entity): int {
         $numAffected = 0;
         try {
             //PDO object creation.
