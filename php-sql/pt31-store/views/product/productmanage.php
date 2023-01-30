@@ -47,11 +47,9 @@ EOT;
                 <td>{$elem->getPrice()}</td>
 				<td>{$elem->getCategoryId()}</td>
 				<td>
-					<form method='GET'>
-						<button class='btn btn-primary' type='submit' name='action' value="product/stock">Stock</button>&emsp;
-						<button class='btn btn-warning' type='submit' name='action' value="product/modify">Modify</button>&emsp;
-						<button class='btn btn-danger' type='submit' name='action' value="product/remove">Remove</button>&emsp;
-					</form>
+					<a href="index.php?action=product/editstock&id={$elem->getId()}"><button class='btn btn-primary'>Stock</button></a>&emsp;
+					<a href="index.php?action=product/modify&id={$elem->getId()}"<button class='btn btn-warning'>Modify</button></a>&emsp;
+					<a href="index.php?action=product/delete&id={$elem->getId()}"<button class='btn btn-danger'>Remove</button></a>&emsp;
 				</td>
             </tr>               
 EOT;

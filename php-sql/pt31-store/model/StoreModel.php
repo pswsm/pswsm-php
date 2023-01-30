@@ -5,15 +5,18 @@ require_once 'model/persist/UserDao.php';
 require_once 'model/persist/CategoryDao.php';
 require_once 'model/persist/ProductDao.php';
 require_once 'model/persist/WarehouseDao.php';
+require_once 'model/persist/WarehouseProductDao.php';
 require_once 'model/User.php';
 require_once 'model/Category.php';
 require_once 'model/Product.php';
 require_once 'model/Warehouse.php';
 
+use Exception;
 use proven\store\model\persist\CategoryDao;
 use proven\store\model\persist\ProductDao;
 use proven\store\model\persist\UserDao;
 use proven\store\model\persist\WarehouseDao;
+use proven\store\model\persist\WarehouseProductDao;
 
 //use proven\store\model\User;
 
@@ -67,10 +70,36 @@ class StoreModel {
 		$dbHelper = new ProductDao();
 		return $dbHelper->selectAll();
 	}
+    
+    public function findProductById(int $id): ?Product {
+        $dbHelper = new ProductDao();
+        $u = new Product($id);
+        return $dbHelper->select($u);
+	}
 
 	public function findAllWarehouses(): array {
 		$dbHelper = new WarehouseDao();
 		return $dbHelper->selectAll();
+	}
+
+	public function findStocksByProduct(Product $prod): array {
+		$dbHelper = new WarehouseProductDao();
+		try {
+			$result = $dbHelper->selectByProductId($prod);
+		} catch (Exception $e) {
+			throw $e;
+		}
+		return $result;
+	}
+
+	public function findStocksByWarehouse(Warehouse $prod): array {
+		$dbHelper = new WarehouseProductDao();
+		try {
+			$result = $dbHelper->selectByWarehouseId($prod);
+		} catch (Exception $e) {
+			throw $e;
+		}
+		return $result;
 	}
 }
 

@@ -2,6 +2,7 @@
 namespace proven\lib\views;
 require_once 'model/User.php';
 use proven\store\model\User;
+use proven\store\model\Product;
 
 class Renderer {
 
@@ -45,6 +46,22 @@ class Renderer {
         $result .= self::renderLabelInput("Fistname: ", "firstname", $user->getFirstname(), "placeholder='firstname'");
         $result .= self::renderLabelInput("Lastname: ", "lastname", $user->getLastname(), "placeholder='lastname'");
         $result .= self::renderLabelInput("Role: ", "role", $user->getRole(), "placeholder='role'");
+        $result .= "</fieldset>";
+        return $result;
+    }
+    
+    /**
+     * renders fields for a product's form
+     * @param Product $user 
+     * @return string html representation of fields
+     */
+    public static function renderProductFields(Product $product): string {
+        $result = "<fieldset>";
+        $result .= self::renderLabelInput("Id: ", "id", $product->getId(), "readonly placeholder='id'");
+        $result .= self::renderLabelInput("Code: ", "code", $product->getCode(), "placeholder='code'");
+        $result .= self::renderLabelInput("Price: ", "price", $product->getPrice(), "placeholder='price'");
+        $result .= self::renderLabelInput("Description: ", "description", $product->getDescription(), "placeholder='description'");
+        $result .= self::renderLabelInput("Category ID: ", "category-id", $product->getCategoryId(), "placeholder='category-id'");
         $result .= "</fieldset>";
         return $result;
     }

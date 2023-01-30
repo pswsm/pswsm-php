@@ -3,9 +3,12 @@ namespace proven\store\model\persist;
 
 require_once 'model/WarehouseProduct.php';
 require_once 'model/persist/StoreDb.php';
+require_once 'model/Product.php';
 
+use proven\store\model\Product as Product;
 use proven\store\model\WarehouseProduct as WarehouseProduct;
 use proven\store\model\persist\StoreDb as StoreDb;
+use proven\store\model\Warehouse;
 
 class WarehouseProductDao {
 	private StoreDb $dbConnect;
@@ -121,5 +124,77 @@ class WarehouseProductDao {
             $data = array();
         }   
         return $data;   
-    }
+	}
+
+    /**
+     * selects entitites in database matching the given product.
+     * return array of entity objects.
+     */
+    public function selectByProductId(Product $entity): array {
+        $data = array();
+        try {
+            //PDO object creation.
+            $connection = $this->dbConnect->getConnection(); 
+            //query preparation.
+			$stmt = $connection->prepare($this->queries['SELECT_WHERE_PID']);
+			$stmt->bindValue(':pid', $entity->getId(), \PDO::PARAM_INT);
+            //query execution.
+            $success = $stmt->execute(); //bool
+            //Statement data recovery.
+            if ($success) {
+                if ($stmt->rowCount()>0) {
+                    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, WarehouseProduct::class);
+                    $data = $stmt->fetchAll(); 
+                    // //or in one single sentence:
+                    //$data = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'User');
+                } else {
+                    $data = array();
+                }
+            } else {
+                $data = array();
+            }
+        } catch (\PDOException $e) {
+			// print "Error Code <br>".$e->getCode();
+            // print "Error Message <br>".$e->getMessage();
+            // print "Strack Trace <br>".nl2br($e->getTraceAsString());
+			throw $e;
+        }   
+        return $data;   
+	}
+
+    /**
+     * selects entitites in database matching the given warehouse.
+     * return array of entity objects.
+     */
+    public function selectByWarehouseId(Warehouse $entity): array {
+        $data = array();
+        try {
+            //PDO object creation.
+            $connection = $this->dbConnect->getConnection(); 
+            //query preparation.
+			$stmt = $connection->prepare($this->queries['SELECT_WHERE_WID']);
+			$stmt->bindValue(':wid', $entity->getId(), \PDO::PARAM_INT);
+            //query execution.
+            $success = $stmt->execute(); //bool
+            //Statement data recovery.
+            if ($success) {
+                if ($stmt->rowCount()>0) {
+                    $stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, WarehouseProduct::class);
+                    $data = $stmt->fetchAll(); 
+                    // //or in one single sentence:
+                    //$data = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'User');
+                } else {
+                    $data = array();
+                }
+            } else {
+                $data = array();
+            }
+        } catch (\PDOException $e) {
+			// print "Error Code <br>".$e->getCode();
+            // print "Error Message <br>".$e->getMessage();
+            // print "Strack Trace <br>".nl2br($e->getTraceAsString());
+			throw $e;
+        }   
+        return $data;   
+	}
 }

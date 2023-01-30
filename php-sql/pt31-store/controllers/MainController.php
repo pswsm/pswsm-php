@@ -103,7 +103,13 @@ class MainController {
                 break;
             case 'loginform':
                 $this->doLoginForm();
-                break;
+				break;
+			case 'product/editstock':
+				$this->doEditStock();
+				break;
+			case 'product/modify':
+				$this->doProductEditForm();
+				break;
             default:  //processing default action.
                 $this->handleError();
                 break;
@@ -264,10 +270,18 @@ class MainController {
      * displays product management page.
      */
     public function doProductMng() {
-        //TODO
         $result = $this->model->findAllProducts();
         $this->view->show("product/productmanage.php", ['list' => $result]);
     }
+
+	public function doProductEditForm() {
+		if (filter_has_var(INPUT_GET, 'id')) {
+			$productId = intval(filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT));
+			$product = $this->model->findProductById($productId);
+		}
+		$this->view->show("product/productedit.php", ['product' => $product]);
+	}
+
 
     /**
      * displays product management page.
