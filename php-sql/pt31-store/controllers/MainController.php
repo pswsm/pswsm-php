@@ -104,17 +104,17 @@ class MainController {
             case 'loginform':
                 $this->doLoginForm();
 				break;
-			case 'product/editstock':
-				$this->doEditStock();
-				break;
 			case 'product/modify':
 				$this->doProductEditForm('edit');
 				break;
 			case 'product/delete':
 				$this->doConfirmProdRemove();
 				break;
-			case 'stocks':
-				$this->doShowStocks();
+			case 'stocks/product':
+				$this->doShowStocks('id');
+				break;
+			case 'stocks/warehouse':
+				$this->doShowStocks('wid');
 				break;
             default:  //processing default action.
                 $this->handleError();
@@ -391,9 +391,8 @@ class MainController {
 	}
 
 	/**
-	 * shows stock on a specific warehouse
+	 * shows stock on a specific warehouse or product
 	 */
-
 	public function doShowStocks(string $var2fetch = "id") {
 		// next var gets the id of either warehouse or product
 		$id = filter_input(INPUT_GET, $var2fetch, FILTER_VALIDATE_INT);
@@ -403,6 +402,7 @@ class MainController {
 				if (!is_null($product)) {
 					$data['stocks'] = $this->model->findStocksByProduct($product);
 					$data['mode'] = 'product';
+					$data['product'] = $product;
 				} else {
 					$data['message'] = 'Product not found';
 				}
@@ -413,6 +413,7 @@ class MainController {
 				if (!is_null($warehouse)) {
 					$data['stocks'] = $this->model->findStocksByWarehouse($warehouse);
 					$data['mode'] = 'warehouse';
+					$data['warehouse'] = $warehouse;
 				} else {
 					$data['message'] = 'Warehouse not found';
 				}
@@ -422,7 +423,7 @@ class MainController {
 				$data['message'] = 'Something went wrong!';
 				break;
 		}
-		$this->view->show();
+		$this->view->show('stocks/stocksmgr.php', $data);
 	}
     
 }

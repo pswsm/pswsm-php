@@ -42,7 +42,7 @@ EOT;
             <tr>
                 <td><a href="index.php?action=category/edit&id={$elem->getId()}">{$elem->getCode()}</a></td>
                 <td>{$elem->getAddress()}</td>
-                <td><a href=index.php?action=stocks&wid={$elem->getId()}><button class="btn btn-primary">Stocks</button></a></td>
+                <td><a href=index.php?action=stocks/warehouse&wid={$elem->getId()}><button class="btn btn-primary">Stocks</button></a></td>
             </tr>               
 EOT;
     }

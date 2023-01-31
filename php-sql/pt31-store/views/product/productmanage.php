@@ -47,7 +47,7 @@ EOT;
                 <td>{$elem->getPrice()}</td>
 				<td>{$elem->getCategoryId()}</td>
 				<td>
-					<a href="index.php?action=product/editstock&id={$elem->getId()}"><button class='btn btn-primary'>Stock</button></a>&emsp;
+					<a href="index.php?action=stocks/product&id={$elem->getId()}"><button class='btn btn-primary'>Stock</button></a>&emsp;
 					<a href="index.php?action=product/modify&id={$elem->getId()}"<button class='btn btn-warning'>Modify</button></a>&emsp;
 					<a href="index.php?action=product/delete&id={$elem->getId()}"<button class='btn btn-danger'>Remove</button></a>&emsp;
 				</td>
