@@ -30,7 +30,8 @@ if (isset($list)) {
         <thead class='table-dark'>
         <tr>
             <th>Code</th>
-            <th>Address</th>
+			<th>Address</th>
+			<th></th>
         </tr>
         </thead>
         <tbody>
@@ -41,6 +42,7 @@ EOT;
             <tr>
                 <td><a href="index.php?action=category/edit&id={$elem->getId()}">{$elem->getCode()}</a></td>
                 <td>{$elem->getAddress()}</td>
+                <td><a href=index.php?action=stocks&wid={$elem->getId()}><button class="btn btn-primary">Stocks</button></a></td>
             </tr>               
 EOT;
     }

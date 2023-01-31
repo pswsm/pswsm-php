@@ -108,7 +108,13 @@ class MainController {
 				$this->doEditStock();
 				break;
 			case 'product/modify':
-				$this->doProductEditForm();
+				$this->doProductEditForm('edit');
+				break;
+			case 'product/delete':
+				$this->doConfirmProdRemove();
+				break;
+			case 'stocks':
+				$this->doShowStocks();
 				break;
             default:  //processing default action.
                 $this->handleError();
@@ -136,7 +142,19 @@ class MainController {
                 break;
             case 'user/remove': 
                 $this->doUserRemove();
-                break;
+				break;
+            case 'product/form':
+                $this->doProductEditForm("add");
+				break;
+			case 'product/add':
+				$this->doProductAdd();
+				break;
+			case 'product/modify':
+				$this->doProductModify();
+				break;
+            case 'product/remove': 
+                $this->doProductRemove();
+				break;
             default:  //processing default action.
                 $this->doHomePage();
                 break;
@@ -274,22 +292,137 @@ class MainController {
         $this->view->show("product/productmanage.php", ['list' => $result]);
     }
 
-	public function doProductEditForm() {
-		if (filter_has_var(INPUT_GET, 'id')) {
-			$productId = intval(filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT));
-			$product = $this->model->findProductById($productId);
-		}
-		$this->view->show("product/productedit.php", ['product' => $product]);
+    public function doProductEditForm(string $mode) {
+        $data = array();
+        if ($mode != 'product/add') {
+            //fetch data for selected user
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            if (($id !== false) && (!is_null($id))) {
+                $product = $this->model->findProductById($id);
+                if (!is_null($product)) {
+                    $data['product'] = $product;
+                }
+             }
+             $data['mode'] = $mode;
+        }
+        $this->view->show("product/productedit.php", $data);  //initial prototype version.
+    }
+
+	public function doProductModify() {
+		$product = Validator::validateProduct(INPUT_POST);
+        //add product to database
+		if (!is_null($product)) {
+			try {
+				$result = $this->model->modifyProduct($product);
+				$message = ($result > 0) ? "Successfully modified":"Error modifying";
+			} catch (\PDOException $e) {
+				$message = $e->getMessage();
+			}
+            $this->view->show("product/productedit.php", ['mode' => 'add', 'message' => $message]);
+        } else {
+            $message = "Invalid data";
+            $this->view->show("product/productedit.php", ['mode' => 'add', 'message' => $message]);
+        }
 	}
 
+    public function doProductAdd() {
+        //get product data from form and validate
+        $product = Validator::validateProduct(INPUT_POST);
+        //add product to database
+		if (!is_null($product)) {
+			try {
+				$result = $this->model->addProduct($product);
+				$message = ($result > 0) ? "Successfully added":"Error adding";
+			} catch (\PDOException $e) {
+				$errcode = $e->getCode();
+				switch ($errcode) {
+					case 2300:
+						$message = 'Category ID out of range.';
+						break;
+					default:
+						$message = "Error adding";
+						break;
+				}
+			}
+            $this->view->show("product/productedit.php", ['mode' => 'add', 'message' => $message]);
+        } else {
+            $message = "Invalid data";
+            $this->view->show("product/productedit.php", ['mode' => 'add', 'message' => $message]);
+        }
+    }
+
+	public function doConfirmProdRemove() {
+        $data = array();
+		//fetch data for selected user
+		$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+		if (($id !== false) && (!is_null($id))) {
+			$product = $this->model->findProductById($id);
+			if (!is_null($product)) {
+				$data['product'] = $product;
+			}
+		}
+        $this->view->show("product/proddelconfirm.php", $data);
+	}
+
+    public function doProductRemove() {
+        //get product data from form and validate
+        $product = Validator::validateProduct(INPUT_POST);
+        //add product to database
+        if (!is_null($product)) {
+            $result = $this->model->removeProduct($product);
+            $message = ($result > 0) ? "Successfully removed":"Error removing";
+			$prodList = $this->model->findAllProducts();
+            $this->view->show("product/productmanage.php", ['message' => $message, 'list' => $prodList]);
+        } else {
+            $message = "Invalid data";
+			$prodList = $this->model->findAllProducts();
+            $this->view->show("product/productmanage.php", ['message' => $message, 'list' => $prodList]);
+        }
+    } 
+
+	/* ============== STOCK AND WAREHOUSE METHODS ============== */
 
     /**
-     * displays product management page.
+     * displays warehouse management page.
      */
     public function doWarehouseMng() {
-        //TODO
         $result = $this->model->findAllWarehouses();
         $this->view->show("warehouse/warehousemanage.php", ['list' => $result]);
-    }
+	}
+
+	/**
+	 * shows stock on a specific warehouse
+	 */
+
+	public function doShowStocks(string $var2fetch = "id") {
+		// next var gets the id of either warehouse or product
+		$id = filter_input(INPUT_GET, $var2fetch, FILTER_VALIDATE_INT);
+		switch ($var2fetch) {
+			case 'id':
+				$product = $this->model->findProductById($id);
+				if (!is_null($product)) {
+					$data['stocks'] = $this->model->findStocksByProduct($product);
+					$data['mode'] = 'product';
+				} else {
+					$data['message'] = 'Product not found';
+				}
+				break;
+
+			case 'wid':
+				$warehouse = $this->model->findWarehouseById($id);
+				if (!is_null($warehouse)) {
+					$data['stocks'] = $this->model->findStocksByWarehouse($warehouse);
+					$data['mode'] = 'warehouse';
+				} else {
+					$data['message'] = 'Warehouse not found';
+				}
+				break;
+			
+			default:
+				$data['message'] = 'Something went wrong!';
+				break;
+		}
+		$this->view->show();
+	}
     
 }

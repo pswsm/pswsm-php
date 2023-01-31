@@ -22,19 +22,23 @@ class Product {
         $this->category_id = $category_id;
     }
     
+    public function getCategoryId(): int {
+        return $this->category_id;
+    }
+    
     public function getId(): int {
         return $this->id;
     }
 
-    public function getCode(): string {
+    public function getCode(): ?string {
         return $this->code;
     }
 
-    public function getDescription(): string {
+    public function getDescription(): ?string {
         return $this->description;
     }
 
-    public function getPrice(): float {
+    public function getPrice(): ?float {
         return $this->price;
     }
 
@@ -52,10 +56,6 @@ class Product {
 
     public function setPrice(float $price): void {
         $this->price = $price;
-    }
-    
-    public function getCategoryId(): int {
-        return $this->category_id;
     }
 
     public function setCategoryId(int $category_id): void {

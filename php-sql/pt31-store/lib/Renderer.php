@@ -67,6 +67,22 @@ class Renderer {
     }
     
     /**
+     * renders fields for a product's form
+     * @param Product $user 
+     * @return string html representation of fields
+     */
+    public static function renderProductDeletionFields(Product $product): string {
+        $result = "<fieldset>";
+        $result .= self::renderLabelInput("Id: ", "id", $product->getId(), "readonly placeholder='id'");
+        $result .= self::renderLabelInput("Code: ", "code", $product->getCode(), "readonly placeholder='code'");
+        $result .= self::renderLabelInput("Price: ", "price", $product->getPrice(), "readonly placeholder='price'");
+        $result .= self::renderLabelInput("Description: ", "description", $product->getDescription(), "readonly placeholder='description'");
+        $result .= self::renderLabelInput("Category ID: ", "category-id", $product->getCategoryId(), "readonly placeholder='category-id'");
+        $result .= "</fieldset>";
+        return $result;
+    }
+    
+    /**
      * renders html representation of a label-input pair
      * @param string $prompt text for the label
      * @param string $name the name of the input field

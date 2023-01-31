@@ -1,7 +1,10 @@
 <?php
 namespace proven\lib\views;
 require_once 'model/User.php';
+require_once 'model/Product.php';
+
 use proven\store\model\User;
+use proven\store\model\Product;
 
 class Validator {
 
@@ -23,6 +26,16 @@ class Validator {
             $clean = \filter_input($method, $variable, $filter); 
         }
         return $clean;
+	}
+
+    public static function validateProduct(int $method) {
+        $obj = null;
+        $id = static::cleanAndValidate($method, 'id', FILTER_VALIDATE_INT); 
+        $code = static::cleanAndValidate($method, 'code'); 
+        $price = static::cleanAndValidate($method, 'price', FILTER_VALIDATE_FLOAT); 
+        $description = static::cleanAndValidate($method, 'description'); 
+        $category_id = static::cleanAndValidate($method, 'category-id', FILTER_VALIDATE_INT); 
+        $obj = new Product($id, $code, $description, $price, $category_id);
+        return $obj;        
     }
-    
 }

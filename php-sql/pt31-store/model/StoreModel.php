@@ -29,7 +29,10 @@ class StoreModel {
 
     public function __construct() {
     }
-   
+
+	/** USER METHODS **/
+	/* This section contains all USER related methods */
+
     public function findAllUsers(): array {
         $dbHelper = new UserDao();
         return $dbHelper->selectAll();
@@ -61,10 +64,14 @@ class StoreModel {
         return $dbHelper->select($u);
 	}
 
+	/** CATEGORIES ZONE **/
+
 	public function findAllCategories(): array {
 		$dbHelper = new CategoryDao();
 		return $dbHelper->selectAll();
 	}
+
+	/** PRODUCT ZONE **/
 
 	public function findAllProducts(): array {
 		$dbHelper = new ProductDao();
@@ -77,10 +84,35 @@ class StoreModel {
         return $dbHelper->select($u);
 	}
 
+    public function modifyProduct(Product $product): int {
+        $dbHelper = new ProductDao();
+        return $dbHelper->update($product);
+    }
+
+    public function removeProduct(Product $product): int {
+        $dbHelper = new ProductDao();
+        return $dbHelper->delete($product);
+    }
+
+    public function addProduct(Product $product): int {
+        $dbHelper = new ProductDao();
+        return $dbHelper->insert($product);
+    }
+
+	/** WAREHOUSE ZONE **/
+
 	public function findAllWarehouses(): array {
 		$dbHelper = new WarehouseDao();
 		return $dbHelper->selectAll();
 	}
+    
+    public function findWarehouseById(int $id): ?Warehouse {
+        $dbHelper = new WarehouseDao();
+        $u = new Warehouse($id);
+        return $dbHelper->select($u);
+	}
+
+	/** STOCKS ZONE **/
 
 	public function findStocksByProduct(Product $prod): array {
 		$dbHelper = new WarehouseProductDao();
@@ -92,10 +124,10 @@ class StoreModel {
 		return $result;
 	}
 
-	public function findStocksByWarehouse(Warehouse $prod): array {
+	public function findStocksByWarehouse(Warehouse $wh): array {
 		$dbHelper = new WarehouseProductDao();
 		try {
-			$result = $dbHelper->selectByWarehouseId($prod);
+			$result = $dbHelper->selectByWarehouseId($wh);
 		} catch (Exception $e) {
 			throw $e;
 		}

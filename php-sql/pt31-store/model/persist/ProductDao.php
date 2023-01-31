@@ -158,9 +158,9 @@ class ProductDao {
                 $data = array();
             }
         } catch (\PDOException $e) {
-//            print "Error Code <br>".$e->getCode();
-//            print "Error Message <br>".$e->getMessage();
-//            print "Strack Trace <br>".nl2br($e->getTraceAsString());
+			// print "Error Code <br>".$e->getCode();
+			// print "Error Message <br>".$e->getMessage();
+			// print "Strack Trace <br>".nl2br($e->getTraceAsString());
             $data = array();
         }   
         return $data;   
@@ -186,10 +186,11 @@ class ProductDao {
             $success = $stmt->execute(); //bool
             $numAffected = $success ? $stmt->rowCount() : 0;
         } catch (\PDOException $e) {
-            // print "Error Code <br>".$e->getCode();
-            // print "Error Message <br>".$e->getMessage();
-            // print "Strack Trace <br>".nl2br($e->getTraceAsString());
-            $numAffected = 0;
+            // print "Error Code ".$e->getCode();
+            // print "<br>Error Message ".$e->getMessage();
+            // print "<br>Strack Trace ".nl2br($e->getTraceAsString());
+			// $numAffected = 0;
+			throw $e;
         }
         return $numAffected;
     }
@@ -209,15 +210,17 @@ class ProductDao {
             $stmt->bindValue(':code', $entity->getCode(), \PDO::PARAM_STR);
             $stmt->bindValue(':description', $entity->getDescription(), \PDO::PARAM_STR);
             $stmt->bindValue(':price', $entity->getPrice(), \PDO::PARAM_STR);
-            $stmt->bindValue(':category_id', $entity->getCategoryId(), \PDO::PARAM_STR);
+            $stmt->bindValue(':category_id', $entity->getCategoryId(), \PDO::PARAM_INT);
+            $stmt->bindValue(':id', $entity->getId(), \PDO::PARAM_INT);
             //query execution.
             $success = $stmt->execute(); //bool
             $numAffected = $success ? $stmt->rowCount() : 0;
         } catch (\PDOException $e) {
-            // print "Error Code <br>".$e->getCode();
-            // print "Error Message <br>".$e->getMessage();
-            // print "Strack Trace <br>".nl2br($e->getTraceAsString());
-            $numAffected = 0;
+            // print "Error Code ".$e->getCode();
+            // print "<br>Error Message ".$e->getMessage();
+            // print "<br>Strack Trace ".nl2br($e->getTraceAsString());
+			// $numAffected = 0;
+			throw $e;
         }
         return $numAffected;  
     }
