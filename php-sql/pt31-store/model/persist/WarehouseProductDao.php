@@ -197,4 +197,33 @@ class WarehouseProductDao {
         }   
         return $data;   
 	}
+
+    /**
+	 * deletes where product id
+	 * returns the number of rows modified
+     */
+    public function removeByPid(Product $entity): int {
+		$result = 0;
+        try {
+            //PDO object creation.
+            $connection = $this->dbConnect->getConnection(); 
+            //query preparation.
+			$stmt = $connection->prepare($this->queries['DELETE_PID']);
+			$stmt->bindValue(':id', $entity->getId(), \PDO::PARAM_INT);
+            //query execution.
+            $success = $stmt->execute(); //bool
+            //Statement data recovery.
+            if ($success) {
+				$result = $stmt->rowCount();
+            } else {
+                $result = 0;
+            }
+        } catch (\PDOException $e) {
+			// print "Error Code <br>".$e->getCode();
+            // print "Error Message <br>".$e->getMessage();
+            // print "Strack Trace <br>".nl2br($e->getTraceAsString());
+			throw $e;
+        }   
+		return $result;
+	}
 }

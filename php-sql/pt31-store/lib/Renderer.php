@@ -1,8 +1,11 @@
 <?php
 namespace proven\lib\views;
 require_once 'model/User.php';
+require_once 'model/Product.php';
+require_once 'model/Category.php';
 use proven\store\model\User;
 use proven\store\model\Product;
+use proven\store\model\Category;
 
 class Renderer {
 
@@ -67,6 +70,20 @@ class Renderer {
     }
     
     /**
+     * renders fields for a category's form
+     * @param Category $user 
+     * @return string html representation of fields
+     */
+    public static function renderCategoryFields(Category $category): string {
+        $result = "<fieldset>";
+        $result .= self::renderLabelInput("Id: ", "id", $category->getId(), "readonly placeholder='id'");
+        $result .= self::renderLabelInput("Code: ", "code", $category->getCode(), "placeholder='code'");
+        $result .= self::renderLabelInput("Description: ", "description", $category->getDescription(), "placeholder='description'");
+        $result .= "</fieldset>";
+        return $result;
+    }
+    
+    /**
      * renders fields for a product's form
      * @param Product $user 
      * @return string html representation of fields
@@ -78,6 +95,20 @@ class Renderer {
         $result .= self::renderLabelInput("Price: ", "price", $product->getPrice(), "readonly placeholder='price'");
         $result .= self::renderLabelInput("Description: ", "description", $product->getDescription(), "readonly placeholder='description'");
         $result .= self::renderLabelInput("Category ID: ", "category-id", $product->getCategoryId(), "readonly placeholder='category-id'");
+        $result .= "</fieldset>";
+        return $result;
+    }
+    
+    /**
+     * renders fields for a category's form
+     * @param Category $user 
+     * @return string html representation of fields
+     */
+    public static function renderCategoryDeletionFields(Category $category): string {
+        $result = "<fieldset>";
+        $result .= self::renderLabelInput("Id: ", "id", $category->getId(), "readonly placeholder='id'");
+        $result .= self::renderLabelInput("Code: ", "code", $category->getCode(), "readonly placeholder='code'");
+        $result .= self::renderLabelInput("Description: ", "description", $category->getDescription(), "readonly placeholder='description'");
         $result .= "</fieldset>";
         return $result;
     }

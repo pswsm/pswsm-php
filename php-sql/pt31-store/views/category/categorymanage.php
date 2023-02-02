@@ -4,22 +4,6 @@
 <strong><?php echo $params['message']; ?></strong>
 </div>
 <?php endif ?>
-<form method="post">
-<div class="row g-3 align-items-center">
-  <span class="col-auto">
-    <label for="search" class="col-form-label">Category to search</label>
-  </span>
-  <span class="col-auto">
-    <input type="text" id="search" name="search" class="form-control" aria-describedby="searchHelpInline">
-  </span>
-  <span class="col-auto">
-    <button class="btn btn-primary" type="submit" name="action" value="user/role">Search</button>
-  </span>
-  <span class="col-auto">
-    <button class="btn btn-primary" type="submit" name="action" value="user/form">Add</button>
-  </span>
-</div>
-</form>
 <?php
 //display list in a table.
 $list = $params['list'] ?? null;
@@ -31,6 +15,7 @@ if (isset($list)) {
         <tr>
             <th>Code</th>
             <th>Description</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -40,7 +25,8 @@ EOT;
         echo <<<EOT
             <tr>
                 <td><a href="index.php?action=category/edit&id={$elem->getId()}">{$elem->getCode()}</a></td>
-                <td>{$elem->getDescription()}</td>
+				<td>{$elem->getDescription()}</td>
+				<td><a href='index.php?action=category/remove&id={$elem->getId()}'><button class='btn btn-danger'>Remove</button></a></td>
             </tr>               
 EOT;
     }

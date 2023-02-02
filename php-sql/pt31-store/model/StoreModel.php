@@ -71,6 +71,27 @@ class StoreModel {
 		return $dbHelper->selectAll();
 	}
 
+    public function findCategoryById(int $id): ?Category {
+        $dbHelper = new CategoryDao();
+        $u = new Category($id);
+        return $dbHelper->select($u);
+	}
+
+    public function modifyCategory(Category $category): int {
+        $dbHelper = new CategoryDao();
+        return $dbHelper->update($category);
+    }
+
+    public function removeCategory(Category $category): int {
+        $dbHelper = new CategoryDao();
+        return $dbHelper->delete($category);
+    }
+
+    public function addCategory(Category $category): int {
+        $dbHelper = new CategoryDao();
+        return $dbHelper->insert($category);
+    }
+
 	/** PRODUCT ZONE **/
 
 	public function findAllProducts(): array {
@@ -133,5 +154,10 @@ class StoreModel {
 		}
 		return $result;
 	}
+
+    public function removeStockByProduct(Product $stock): int {
+        $dbHelper = new WarehouseProductDao();
+        return $dbHelper->removeByPid($stock);
+    }
 }
 

@@ -2,9 +2,11 @@
 namespace proven\lib\views;
 require_once 'model/User.php';
 require_once 'model/Product.php';
+require_once 'model/Category.php';
 
 use proven\store\model\User;
 use proven\store\model\Product;
+use proven\store\model\Category;
 
 class Validator {
 
@@ -36,6 +38,15 @@ class Validator {
         $description = static::cleanAndValidate($method, 'description'); 
         $category_id = static::cleanAndValidate($method, 'category-id', FILTER_VALIDATE_INT); 
         $obj = new Product($id, $code, $description, $price, $category_id);
+        return $obj;        
+    }
+
+    public static function validateCategory(int $method) {
+        $obj = null;
+        $id = static::cleanAndValidate($method, 'id', FILTER_VALIDATE_INT); 
+        $code = static::cleanAndValidate($method, 'code'); 
+        $description = static::cleanAndValidate($method, 'description'); 
+        $obj = new Category($id, $code, $description);
         return $obj;        
     }
 }

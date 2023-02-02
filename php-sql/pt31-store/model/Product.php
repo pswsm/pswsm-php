@@ -63,7 +63,7 @@ class Product {
     }
 
     public function __toString() {
-        return sprintf("User{[id=%d][code=%s][description=%s][price=%.2f€][category_id=%d]}",
+        return sprintf("Product{[id=%d][code=%s][description=%s][price=%.2f€][category_id=%d]}",
                 $this->id, $this->code, $this->description,
                 $this->price, $this->category_id);        
     }

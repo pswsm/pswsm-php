@@ -205,7 +205,8 @@ class CategoryDao {
             //query preparation.
             $stmt = $connection->prepare($this->queries['UPDATE']);
             $stmt->bindValue(':code', $entity->getCode(), \PDO::PARAM_STR);
-            $stmt->bindValue(':description', $entity->getDescription(), \PDO::PARAM_STR);
+			$stmt->bindValue(':description', $entity->getDescription(), \PDO::PARAM_STR);
+			$stmt->bindValue(':id', $entity->getId(), \PDO::PARAM_INT);
             //query execution.
             $success = $stmt->execute(); //bool
             $numAffected = $success ? $stmt->rowCount() : 0;

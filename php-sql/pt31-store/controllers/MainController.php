@@ -94,7 +94,13 @@ class MainController {
                 break;
             case 'category':
                 $this->doCategoryMng();
-                break;
+				break;
+			case 'category/edit':
+				$this->doCategoryEditForm("edit");
+				break;
+			case 'category/delete':
+				$this->doConfirmCategoryDelete();
+				break;
             case 'product':
                 $this->doProductMng();
                 break;
@@ -155,9 +161,15 @@ class MainController {
             case 'product/remove': 
                 $this->doProductRemove();
 				break;
+			case 'category/modify':
+				$this->doCategoryModify();
+				break;
+			case 'category/remove':
+				$this->doCategoryRemove();
+				break;
             default:  //processing default action.
                 $this->doHomePage();
-                break;
+				break;
         }
     }
 
@@ -282,6 +294,68 @@ class MainController {
         $this->view->show("category/categorymanage.php", ['list' => $result]);
     }
 
+    public function doCategoryEditForm(string $mode) {
+        $data = array();
+        if ($mode != 'category/add') {
+            //fetch data for selected user
+            $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+            if (($id !== false) && (!is_null($id))) {
+                $category = $this->model->findCategoryById($id);
+                if (!is_null($category)) {
+                    $data['category'] = $category;
+                }
+             }
+             $data['mode'] = $mode;
+        }
+        $this->view->show("category/categoryedit.php", $data);  //initial prototype version.
+    }
+
+	public function doCategoryModify() {
+		$category = Validator::validateCategory(INPUT_POST);
+        //add category to database
+		if (!is_null($category)) {
+			try {
+				$result = $this->model->modifyCategory($category);
+				$message = ($result > 0) ? "Successfully modified":"Error modifying";
+			} catch (\PDOException $e) {
+				$message = $e->getMessage();
+			}
+            $this->view->show("category/categoryedit.php", ['mode' => 'add', 'message' => $message]);
+        } else {
+            $message = "Invalid data";
+            $this->view->show("category/categoryedit.php", ['mode' => 'add', 'message' => $message]);
+        }
+	}
+
+	public function doConfirmCatRemove() {
+        $data = array();
+		//fetch data for selected user
+		$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+		if (($id !== false) && (!is_null($id))) {
+			$category = $this->model->findCategoryById($id);
+			if (!is_null($category)) {
+				$data['category'] = $category;
+			}
+		}
+        $this->view->show("category/catdelconfirm.php", $data);
+	}
+
+    public function doCategoryRemove() {
+        //get category data from form and validate
+        $category = Validator::validateCategory(INPUT_POST);
+        //add category to database
+        if (!is_null($category)) {
+            $result = $this->model->removeCategory($category);
+            $message = ($result > 0) ? "Successfully removed":"Error removing";
+			$prodList = $this->model->findAllCategories();
+            $this->view->show("category/categorymanage.php", ['message' => $message, 'list' => $prodList]);
+        } else {
+            $message = "Invalid data";
+			$prodList = $this->model->findAllCategories();
+            $this->view->show("category/categorymanage.php", ['message' => $message, 'list' => $prodList]);
+        }
+    } 
+
     /* ============== PRODUCT MANAGEMENT CONTROL METHODS ============== */
 
     /**
@@ -369,7 +443,8 @@ class MainController {
         $product = Validator::validateProduct(INPUT_POST);
         //add product to database
         if (!is_null($product)) {
-            $result = $this->model->removeProduct($product);
+			$result = $this->model->removeProduct($product);
+			$result += $this->model->removeStockByProduct($product);
             $message = ($result > 0) ? "Successfully removed":"Error removing";
 			$prodList = $this->model->findAllProducts();
             $this->view->show("product/productmanage.php", ['message' => $message, 'list' => $prodList]);
