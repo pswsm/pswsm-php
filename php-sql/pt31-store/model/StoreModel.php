@@ -133,6 +133,11 @@ class StoreModel {
         return $dbHelper->select($u);
 	}
 
+    public function modifyWarehouse(Warehouse $warehouse): int {
+        $dbHelper = new WarehouseDao();
+        return $dbHelper->update($warehouse);
+    }
+
 	/** STOCKS ZONE **/
 
 	public function findStocksByProduct(Product $prod): array {

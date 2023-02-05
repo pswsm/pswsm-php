@@ -99,7 +99,7 @@ class MainController {
 				$this->doCategoryEditForm("edit");
 				break;
 			case 'category/delete':
-				$this->doConfirmCategoryDelete();
+				$this->doConfirmCatRemove();
 				break;
             case 'product':
                 $this->doProductMng();
@@ -115,6 +115,9 @@ class MainController {
 				break;
 			case 'product/delete':
 				$this->doConfirmProdRemove();
+				break;
+			case 'warehouse/edit':
+				$this->doWarehouseEditForm('edit');
 				break;
 			case 'stocks/product':
 				$this->doShowStocks('id');
@@ -166,6 +169,9 @@ class MainController {
 				break;
 			case 'category/remove':
 				$this->doCategoryRemove();
+				break;
+			case 'warehouse/modify':
+				$this->doWarehouseModify();
 				break;
             default:  //processing default action.
                 $this->doHomePage();
@@ -463,6 +469,41 @@ class MainController {
     public function doWarehouseMng() {
         $result = $this->model->findAllWarehouses();
         $this->view->show("warehouse/warehousemanage.php", ['list' => $result]);
+	}
+
+    public function doWarehouseEditForm() {
+        $data = array();
+		//fetch data for selected warehouse
+		$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+		if (($id !== false) && (!is_null($id))) {
+			$warehouse = $this->model->findWarehouseById($id);
+			if (!is_null($warehouse)) {
+				$data['warehouse'] = $warehouse;
+			}
+		}
+        $this->view->show("warehouse/warehouseedit.php", $data);  //initial prototype version.
+    }
+
+	/**
+	 * modifies a warehouse
+	 */
+	public function doWarehouseModify() {
+		$warehouse = Validator::validateWarehouse(INPUT_POST);
+        //add warehouse to database
+		if (!is_null($warehouse)) {
+			try {
+				$result = $this->model->modifyWarehouse($warehouse);
+				$message = ($result > 0) ? "Successfully modified":"Error modifying";
+			} catch (\PDOException $e) {
+				$message = $e->getMessage();
+			}
+			$list = $this->model->findAllWarehouses();
+            $this->view->show("warehouse/warehousemanage.php", ['list' => $list, 'message' => $message]);
+        } else {
+            $message = "Invalid data";
+			$list = $this->model->findAllWarehouses();
+            $this->view->show("warehouse/warehousemanage.php", ['list' => $list, 'message' => $message]);
+        }
 	}
 
 	/**
