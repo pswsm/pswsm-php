@@ -125,6 +125,9 @@ class MainController {
 			case 'stocks/warehouse':
 				$this->doShowStocks('wid');
 				break;
+			case 'logout':
+				$this->doLogout();
+				break;
             default:  //processing default action.
                 $this->handleError();
                 break;
@@ -173,6 +176,8 @@ class MainController {
 			case 'warehouse/modify':
 				$this->doWarehouseModify();
 				break;
+			case 'login':
+				$this->doLogin();
             default:  //processing default action.
                 $this->doHomePage();
 				break;
@@ -204,7 +209,32 @@ class MainController {
         $this->view->show("login/loginform.php", []);  //initial prototype version;
     }
 
-    /* ============== USER MANAGEMENT CONTROL METHODS ============== */
+	public function doLogin() {
+		if (isset($_SESSION['username'])) {
+			$this->view->show("login/loginform.php", ['message' => 'Already logged in']);
+		} else {
+			$loginData = Validator::validateLogin(INPUT_POST);
+			$user = $this->model->findUserByUsername($loginData['username']);
+			if (count($user) > 0) {
+				$fUser = $user[0];
+				if ($fUser->getPassword() === $loginData['password']) {
+					$_SESSION['username'] = $fUser->getUsername();
+					$_SESSION['userrole'] = $fUser->getRole();
+					header('Location: index.php?action=home');
+				}
+				$this->view->show("login/loginform.php", ['message' => 'Wrong password']);
+			} else {
+				$this->view->show("login/loginform.php", ['message' => 'User not found']);
+			}
+		}
+	}
+
+	public function doLogout() {
+		session_unset();
+		session_destroy();
+		header('Location: index.php?action=home');
+	}
+	    /* ============== USER MANAGEMENT CONTROL METHODS ============== */
 
     /**
      * displays user management page.

@@ -63,6 +63,11 @@ class StoreModel {
         $u = new User($id);
         return $dbHelper->select($u);
 	}
+    
+    public function findUserByUsername(string $username): Array {
+        $dbHelper = new UserDao();
+        return $dbHelper->selectWhere('username', $username);
+	}
 
 	/** CATEGORIES ZONE **/
 

@@ -1,4 +1,6 @@
 <?php
+$action = (isset($_SESSION['username'])) ? 'logout' : 'loginform' ;
+$inhtml = (isset($_SESSION['username'])) ? 'Logout' : 'Login' ;
 echo <<<EOT
 <nav class="navbar navbar-default navbar-expand-sm navbar-light bg-primary">
   <div class="container-fluid">
@@ -13,8 +15,8 @@ echo <<<EOT
       <li><a class="nav-link" href="#">Page 3</a></li>
     </ul>
     </div>
-    <div>
-      <a class="nav-link" href="index.php?action=loginform">login</a>
+ 	<div>
+      <a class="nav-link" href="index.php?action={$action}">{$inhtml}</a>
     </div>
   </div>
 </nav>

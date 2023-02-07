@@ -52,6 +52,12 @@ class Validator {
         return $obj;        
     }
 
+    public static function validateLogin(int $method) {
+        $username = static::cleanAndValidate($method, 'username'); 
+        $password = static::cleanAndValidate($method, 'password'); 
+        return ['username' => $username, 'password' => $password];        
+    }
+
     public static function validateWarehouse(int $method) {
         $obj = null;
         $id = static::cleanAndValidate($method, 'id', FILTER_VALIDATE_INT); 
