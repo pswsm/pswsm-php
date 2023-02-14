@@ -1,0 +1,9 @@
+RewriteEngine On
+
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+RewriteRule ^(.*)/$ $1 [R]
+RewriteRule ^(?:index.php/)?(user)$ index.php?action=$1 [QSA,NC]
+RewriteRule ^(?:index.php/)?(user)/([a-z]+)/([a-z]+)*?$ index.php?action=$1/$2&search=$3 [QSA,NC]
+RewriteRule ^(?:index.php/)?(category)(/[a-z]+)?(/([a-z])*)?$ index.php?action=$1$2&search=$3 [QSA,NC]

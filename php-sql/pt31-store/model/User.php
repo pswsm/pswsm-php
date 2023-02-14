@@ -1,7 +1,7 @@
 <?php
 namespace proven\store\model;
 
-class User {
+class User implements \JsonSerializable {
     
     private int $id;
     private ?string $username;
@@ -78,6 +78,10 @@ class User {
         return sprintf("User{[id=%d][username=%s][password=%s][firstname=%s][lastname=%s][role=%s]}",
                 $this->id, $this->username, $this->password,
                 $this->firstname, $this->lastname, $this->role);
-    }
+	}
+
+	public function jsonSerialize() {
+		return get_object_vars($this);
+	}
 
 }
